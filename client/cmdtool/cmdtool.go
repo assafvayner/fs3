@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	pb "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
+	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
 	"google.golang.org/grpc"
 	"os"
 )
@@ -16,12 +16,12 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	client := pb.NewFs3Client(conn)
+	client := fs3.NewFs3Client(conn)
 
 	// how to use client now:
 	context := context.Background()
 
-	request := pb.GetRequest{
+	request := fs3.GetRequest{
 		FilePath: "a/b/c",
 	}
 
