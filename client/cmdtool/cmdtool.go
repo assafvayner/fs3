@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	pb "gitlab.com/assafv/fs3/protos/fs3"
+	pb "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
 	"google.golang.org/grpc"
 	"os"
 )

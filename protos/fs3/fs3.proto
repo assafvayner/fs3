@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "gitlab.com/assafv/fs3/protos/fs3";
+option go_package = "gitlab.cs.washington.edu/assafv/fs3/protos/fs3";
 
 package fs3;
 
