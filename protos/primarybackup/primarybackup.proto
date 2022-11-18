@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option go_package = "gitlab.com/assafv/fs3/protos/primarybackup";
+
+import "fs3.proto";
+
+package primarybackup;
+
+service backup {
+  rpc Forward(ForwardRequest) returns (ForwardReply) {}
+}
+
+message ForwardRequest {
+  oneof client_request {
+    fs3.CopyRequest copy_request = 1;
+    fs3.RemoveRequest remove_request = 2;
+    fs3.GetRequest get_request = 3;
+  }
+}
+
+message ForwardReply {}

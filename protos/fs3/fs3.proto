@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option go_package = "gitlab.com/assafv/fs3/protos/fs3";
+
+package fs3;
+
+service fs3 {
+  rpc Copy(CopyRequest) returns (CopyReply) {}
+  rpc Remove(RemoveRequest) returns (RemoveReply) {}
+  rpc Get(GetRequest) returns (GetReply) {}
+}
+
+enum Status {
+  GREAT_SUCCESS = 0;
+  NOT_FOUND = 1;
+  INTERNAL_ERROR = 2;
+}
+
+/* requests */
+
+message CopyRequest {
+  string file_path = 1;
+  bytes file_content = 2;
+}
+
+message RemoveRequest {
+  string file_path = 1;
+}
+
+message GetRequest {
+  string file_path = 1;
+}
+
+/* replies */
+
+message CopyReply {
+  Status status = 1;
+  string file_path = 2;
+}
+
+message RemoveReply {
+  Status status = 1;
+  string file_path = 2;
+}
+
+message GetReply {
+  Status status = 1;
+  string file_path = 2;
+  bytes file_content = 3;
+}
+
