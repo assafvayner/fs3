@@ -1,37 +1,40 @@
-package server
+package main
 
 import (
 	"fmt"
-  "net"
-  "os"
-  
+	"net"
+	"os"
+
+	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
+	primarybackup "gitlab.cs.washington.edu/assafv/fs3/protos/primarybackup"
+	"gitlab.cs.washington.edu/assafv/fs3/server/backup"
+	"gitlab.cs.washington.edu/assafv/fs3/server/primary"
+	"gitlab.cs.washington.edu/assafv/fs3/server/config"
 	"google.golang.org/grpc"
-  "gitlab.cs.washington.edu/assafv/fs3/server/fs3handler"
-  "gitlab.cs.washington.edu/assafv/fs3/server/primarybackuphandler"
-  fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
-  primarybackup "gitlab.cs.washington.edu/assafv/fs3/protos/primarybackup"
 )
 
 func main() {
-  ln, err := net.Listen("tcp", ":5000")
+	ln, err := net.Listen("tcp", fmt.Sprint(":", GetPort()))
 
-  if err != nil {
-    fmt.Fprintln(os.Stderr, err)
-  }
-  defer ln.Close()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	}
+	defer ln.Close()
 
-  server := grpc.NewServer()
+	server := grpc.NewServer()
 
-  if isPrimary() {
-    fs3.RegisterFs3Server(server, fs3handler.NewFs3Handler())
-  } else {
-    primarybackup.RegisterBackupServer(server, primarybackuphandler.NewPrimaryBackupHandler())
-  }
+	if config.IsPrimary() {
+		fs3.RegisterFs3Server(server, primary.NewPrimaryHandler())
+	} else {
+		primarybackup.RegisterBackupServer(server, backup.NewBackupHandler())
+	}
 
-  server.Serve(ln)
+	server.Serve(ln)
 }
 
-func isPrimary() (bool) {
-  // figure out if we are primary based on config
-  return true
+func GetPort() (int) {
+	if config.IsPrimary() {
+		return config.PRIMARY_PORT
+	}
+	return config.BACKUP_PORT
 }
