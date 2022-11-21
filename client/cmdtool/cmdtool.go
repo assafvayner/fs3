@@ -5,12 +5,19 @@ import (
 	"fmt"
 	"os"
 
+	"gitlab.cs.washington.edu/assafv/fs3/client/cmdtool/args"
 	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
+	operation, filePath, err := args.ParseArgs()
+
+	// will remove later when switch is implemented
+	fmt.Println(operation)
+	fmt.Println(filePath)
+
 	// read options from command line then use grpc client
 	// ran client side
 	conn, err := grpc.Dial("server0:5000", grpc.WithTransportCredentials(insecure.NewCredentials()))
