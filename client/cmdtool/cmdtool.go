@@ -3,15 +3,17 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
+
 	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
 	"google.golang.org/grpc"
-	"os"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
 	// read options from command line then use grpc client
 	// ran client side
-	conn, err := grpc.Dial("server0:5000")
+	conn, err := grpc.Dial("server0:5000", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
