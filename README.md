@@ -23,6 +23,30 @@ We may attempt to test network performance drops by measuring RTT's per forwardi
 We will keep a request Id for each forwarding request, and record the total time of the forwarding request on the server and the total time of processing the request on the backup, then by subtracting the latter from the former we will be able to gauge the time of packets on the wire (barring de/serialization time taken by grpc libraries).
 The we will be able to visualize the performance drops based on network performance from aggregating the data from both nodes.
 
+## Running the applications in development mode
+### Server
+To build the server run `make server` which will generate the `server` executable in the `server` directory (`server/server`).
+
+To run the primary run: `make primary`
+
+To run the backup run: `make backup`
+
+In local development mode you'll want to save the files in the `data` directory as opposed to the privileged `/data` directory. To do this add `stage=dev` to the make commands.
+
+#### *tl;dr*
+`make primary stage=dev`
+
+`make backup stage=dev`
+
+### CLI client
+- run `make fs3_client`
+- Then you will have the `fs3` executable available in the `cli-go` directory
+  - use `./fs3 -h` to see how to use it; briefly:
+    - `./fs3 cp <local_src> <remote_dst>`
+    - `./fs3 rm <remote_path>`
+    - `./fs3 get <remote_src> <local_dst>`
+    - all params are paths
+
 ## Generating Protos
 After acquiring the prerequisites, simply run `make protos` to regenerate.
 
