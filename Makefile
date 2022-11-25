@@ -2,19 +2,27 @@
 
 fs3_proto: protos/fs3/fs3.proto
 	protoc \
-		--go_out=. \
+		--proto_path=protos/ \
+		--go_out=protos \
 		--go_opt=paths=source_relative \
-		--go-grpc_out=. \
+		--go-grpc_out=protos \
 		--go-grpc_opt=paths=source_relative \
 		./protos/fs3/fs3.proto
+	python -m grpc_tools.protoc \
+		-Iprotos \
+		--python_out=protos \
+		--pyi_out=protos \
+		--grpc_python_out=protos \
+		protos/fs3/fs3.proto
 
 primarybackup_proto: protos/fs3/fs3.proto protos/primarybackup/primarybackup.proto
 	protoc \
+		--proto_path=protos/ \
 		--proto_path=protos/fs3 \
 		--proto_path=protos/primarybackup \
-		--go_out=protos/primarybackup \
+		--go_out=protos \
 		--go_opt=paths=source_relative \
-		--go-grpc_out=protos/primarybackup \
+		--go-grpc_out=protos \
 		--go-grpc_opt=paths=source_relative \
 		./protos/primarybackup/primarybackup.proto
 
@@ -37,7 +45,7 @@ fs3_client: $(CLIENT_GO_FILES)
 	go build -o cli-go/fs3 cli-go/fs3.go
 
 protos_clean: FORCE
-	rm protos/*/*.go
+	rm -f protos/*/*.go protos/*/*.py protos/*/*.pyi
 
 # don't remove protos unless you are able to regenerate them
 clean:

@@ -19,14 +19,20 @@ enum Status {
 
 /* requests */
 
+/* request used to copy a file from client to server */
+
 message CopyRequest {
   string file_path = 1;
   bytes file_content = 2;
 }
 
+/* request used to remove a file from the server */
+
 message RemoveRequest {
   string file_path = 1;
 }
+
+/* request used to get a file from the server, contents sent back to client */
 
 message GetRequest {
   string file_path = 1;
@@ -34,15 +40,22 @@ message GetRequest {
 
 /* replies */
 
+/* reply containing status of copying file to the server */
+
 message CopyReply {
   Status status = 1;
   string file_path = 2;
 }
 
+/* reply containing status of removing file from the server */
+
 message RemoveReply {
   Status status = 1;
   string file_path = 2;
 }
+
+/* reply containing file contents gotten from the app server
+  and an error status indicating success or error */
 
 message GetReply {
   Status status = 1;

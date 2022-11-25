@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.19.1
-// source: protos/fs3/fs3.proto
+// source: fs3/fs3.proto
 
 package fs3
 
@@ -173,5 +173,5 @@ var Fs3_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "protos/fs3/fs3.proto",
+	Metadata: "fs3/fs3.proto",
 }
