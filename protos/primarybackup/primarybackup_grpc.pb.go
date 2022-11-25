@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.19.1
-// source: primarybackup.proto
+// source: primarybackup/primarybackup.proto
 
 package primarybackup
 
@@ -101,5 +101,5 @@ var Backup_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "primarybackup.proto",
+	Metadata: "primarybackup/primarybackup.proto",
 }
