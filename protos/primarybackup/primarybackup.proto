@@ -10,6 +10,8 @@ service backup {
   rpc Forward(ForwardRequest) returns (ForwardReply) {}
 }
 
+/* request used to forward an fs3 reques to the backup server */
+
 message ForwardRequest {
   oneof client_request {
     fs3.CopyRequest copy_request = 1;
@@ -17,5 +19,7 @@ message ForwardRequest {
     fs3.GetRequest get_request = 3;
   }
 }
+
+/* empty reply message */
 
 message ForwardReply {}
