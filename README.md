@@ -3,6 +3,26 @@
 CSE 453 Data Center Systems final project
 Assaf Vayner (assafv) + Tom Wu (zw237)
 
+## Summary
+A distributed remote file system with a grpc interface and command line tool to access it.
+
+## Intended Runtime Configuration
+The server nodes for this project are intended to be managed via docker swarm and ran on cloudlab servers.
+While we do backup files we do not currently support a mechanism to make the backup node into the primary node and support allowing the backup to fail indefinitely.
+The client code is also intended to be ran from cloudlab nodes so that they have access to communication without the public internet.
+
+The client consists of 2 completely separate components, firstly a cli tool to make individual requests as proof of concept of the initial intended usage.
+Secondly a python program used to make grpc calls and measure their duration as a method of analyzing performance.
+
+## Performance analysis
+We intend to analyze performance by varying frequency of requests, and the size of request/response payloads.
+We will attempt to run the server application on containers running on bare metal as well as vms with virtualized storage i/o paths so as to showcase the performance gain of getting direct access to storage hardware.
+
+### Network performance analysis
+We may attempt to test network performance drops by measuring RTT's per forwarding requests.
+We will keep a request Id for each forwarding request, and record the total time of the forwarding request on the server and the total time of processing the request on the backup, then by subtracting the latter from the former we will be able to gauge the time of packets on the wire (barring de/serialization time taken by grpc libraries).
+The we will be able to visualize the performance drops based on network performance from aggregating the data from both nodes.
+
 ## Generating Protos
 After acquiring the prerequisites, simply run `make protos` to regenerate.
 
