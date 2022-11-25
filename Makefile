@@ -1,9 +1,5 @@
 .PHONY: FORCE
 
-protoc_single=protoc --go_out=protos/$(1) --go_opt=paths=source_relative \
-	--go-grpc_out=protos/$(1) --go-grpc_opt=paths=source_relative $(2) $(3) \
-	./protos/$(1)/$(1).proto
-
 fs3_proto: protos/fs3/fs3.proto
 	protoc \
 		--proto_path=protos/ \
@@ -43,9 +39,15 @@ primary: server
 backup: server
 	./server/server backup $(stage)
 
+CLIENT_GO_FILES := $(shell find cli-go -name "*.go")
+
+fs3_client: $(CLIENT_GO_FILES)
+	go build -o cli-go/fs3 cli-go/fs3.go
+
 protos_clean: FORCE
 	rm -f protos/*/*.go protos/*/*.py protos/*/*.pyi
 
+# don't remove protos unless you are able to regenerate them
 clean:
-	make protos_clean
 	rm server/server
+	rm cli-go/fs3

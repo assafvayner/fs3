@@ -3,6 +3,7 @@ module gitlab.cs.washington.edu/assafv/fs3
 go 1.19
 
 require (
+	github.com/akamensky/argparse v1.4.0
 	github.com/golang/protobuf v1.5.2
 	google.golang.org/grpc v1.51.0
 )
