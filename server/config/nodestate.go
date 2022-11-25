@@ -20,13 +20,26 @@ func IsPrimary() (bool) {
     return true
   }
 
-  if pbArg == "backup" {
-    return false
+  if pbArg != "backup" {
+    fmt.Fprintln(os.Stderr, "Bad primary/backup param")
+    os.Exit(1)
   }
 
-  fmt.Fprintln(os.Stderr, "Bad primary/backup param")
-  os.Exit(1)
+  return false
+}
 
-  // make linter happy, never reached
+func IsDev() (bool) {
+  // no arg provided assume prod
+  if len(os.Args) < 3 {
+    return false
+  }
+  stageArg := os.Args[2]
+  if stageArg == "dev" {
+    return true
+  }
+  if stageArg != "prod" {
+    fmt.Fprintln(os.Stderr, "Bad dev/prod param")
+    os.Exit(1)
+  }
   return false
 }

@@ -24,5 +24,20 @@ primarybackup_proto: protos/fs3/fs3.proto protos/primarybackup/primarybackup.pro
 
 protos: fs3_proto primarybackup_proto
 
+SERVER_FILES := $(shell find server -name "*.go")
+
+server: $(SERVER_FILES)
+	go build -o server/server server/server.go
+
+primary: server
+	./server/server primary $(stage)
+
+backup: server
+	./server/server backup $(stage)
+
 protos_clean: FORCE
 	rm protos/*/*.go
+
+clean:
+	make protos_clean
+	rm server/server
