@@ -18,11 +18,6 @@ Secondly a python program used to make grpc calls and measure their duration as 
 We intend to analyze performance by varying frequency of requests, and the size of request/response payloads.
 We will attempt to run the server application on containers running on bare metal as well as vms with virtualized storage i/o paths so as to showcase the performance gain of getting direct access to storage hardware.
 
-### Network performance analysis
-We may attempt to test network performance drops by measuring RTT's per forwarding requests.
-We will keep a request Id for each forwarding request, and record the total time of the forwarding request on the server and the total time of processing the request on the backup, then by subtracting the latter from the former we will be able to gauge the time of packets on the wire (barring de/serialization time taken by grpc libraries).
-The we will be able to visualize the performance drops based on network performance from aggregating the data from both nodes.
-
 ## Running the applications in development mode
 ### Server
 To build the server run `make server` which will generate the `server` executable in the `server` directory (`server/server`).
