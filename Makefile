@@ -48,6 +48,18 @@ protos_clean: FORCE
 	rm -f protos/*/*.go protos/*/*.py protos/*/*.pyi
 
 # don't remove protos unless you are able to regenerate them
-clean:
-	rm server/server
-	rm cli-go/fs3
+clean: FORCE
+	rm -f server/server
+	rm -f cli-go/fs3
+
+build_p: FORCE
+	docker build -t fs3/primary -f Dockerfile_p .
+
+run_p: FORCE
+	docker run -d -p 127.0.0.1:5000:5000 --hostname primary.fs3 fs3/primary
+
+build_b: FORCE
+	docker build -t fs3/backup -f Dockerfile_b .
+
+run_b: FORCE
+	docker run -d -p 127.0.0.1:50000:50000 --hostname backup.fs3 fs3/backup

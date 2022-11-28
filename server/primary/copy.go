@@ -18,6 +18,7 @@ func (handler *PrimaryHandler) Copy(ctx context.Context, req *fs3.CopyRequest) (
 
 	_, err = handler.PBClient.Forward(ctx, forwardReq)
 	if err != nil {
+		handler.Logger.Printf("error on forward for copy file <%s>, err: %s\n", req.GetFilePath(), err)
 		return nil, err
 	}
 

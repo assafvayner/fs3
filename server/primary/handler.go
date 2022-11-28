@@ -2,6 +2,7 @@ package primary
 
 import (
   "fmt"
+	"log"
 	"os"
 
 	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
@@ -15,15 +16,17 @@ import (
 type PrimaryHandler struct {
 	Fs3processor *fs3processor.Fs3RequestProcessor
 	PBClient     primarybackup.BackupClient
+	Logger			 *log.Logger
 	fs3.UnimplementedFs3Server
 }
 
-func NewPrimaryHandler() *PrimaryHandler {
+func NewPrimaryHandler(logger *log.Logger) *PrimaryHandler {
 	// need to dial connection to backup
 
 	return &PrimaryHandler{
-		Fs3processor: fs3processor.NewFs3RequestProcessor(),
+		Fs3processor: fs3processor.NewFs3RequestProcessor(logger),
 		PBClient:     nil,
+		Logger:				logger,
 	}
 }
 
