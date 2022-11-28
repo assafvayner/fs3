@@ -1,7 +1,15 @@
 package fs3processor
 
-type Fs3RequestProcessor struct {}
+import (
+  "log"
+)
 
-func NewFs3RequestProcessor() (*Fs3RequestProcessor) {
-  return &Fs3RequestProcessor{}
+type Fs3RequestProcessor struct {
+  Logger *log.Logger
+}
+
+func NewFs3RequestProcessor(logger *log.Logger) (*Fs3RequestProcessor) {
+  return &Fs3RequestProcessor{
+    Logger: logger,
+  }
 }

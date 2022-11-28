@@ -27,7 +27,8 @@ func (handler *BackupHandler) Forward(ctx context.Context, req *primarybackup.Fo
     _, err = handler.Fs3processor.Get(fs3GetRequest)
     return reply, err
   }
-    
+
+  handler.Logger.Println("Failed to process forward request, missing fs3 request")    
   err = errors.New("Bad Forward request content")
   return reply, err
 }

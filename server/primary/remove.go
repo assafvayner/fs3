@@ -18,6 +18,7 @@ func (handler *PrimaryHandler) Remove(ctx context.Context, req *fs3.RemoveReques
 
 	_, err = handler.PBClient.Forward(ctx, forwardReq)
 	if err != nil {
+		handler.Logger.Printf("error on forward for remove file <%s>, err: %s\n", req.GetFilePath(), err)
 		return nil, err
 	}
 
