@@ -3,3 +3,4 @@ data/*
 server/server
 venv/*
 cli-go/fs3
+*.log
