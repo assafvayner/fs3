@@ -82,3 +82,9 @@ shutdown_p: FORCE
 shutdown_b: FORCE
 	docker shutdown $(BACKUP_NAME)
 	docker rm $(BACKUP_NAME)
+
+up: FORCE
+	docker compose -f fs3.yml up -d --build
+
+down: FORCE
+	docker compose -f fs3.yml down
