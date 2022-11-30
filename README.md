@@ -14,6 +14,12 @@ The client code is also intended to be ran from cloudlab nodes so that they have
 The client consists of 2 completely separate components, firstly a cli tool to make individual requests as proof of concept of the initial intended usage.
 Secondly a python program used to make grpc calls and measure their duration as a method of analyzing performance.
 
+## Instructions to run server
+Tested on wsl/ubuntu mounted, run the following commands (you will need docker installed)
+- `sudo make build_p`
+- `sudo make build_b`
+- `sudo make up`
+
 ## Performance analysis
 We intend to analyze performance by varying frequency of requests, and the size of request/response payloads.
 We will attempt to run the server application on containers running on bare metal as well as vms with virtualized storage i/o paths so as to showcase the performance gain of getting direct access to storage hardware.
