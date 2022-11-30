@@ -1,0 +1,35 @@
+services:
+  primary:
+    depends_on:
+      - backup
+    image: fs3/primary
+    hostname: primary.fs3
+    ports:
+      - "5000:5000"
+    networks:
+      - fs3-net
+    volumes:
+      - data:/data
+      - log:/log
+    deploy:
+      replicas: 1
+
+  backup:
+    image: fs3/backup
+    hostname: backup.fs3
+    ports:
+      - "50000:50000"
+    networks:
+      - fs3-net
+    volumes:
+      - data:/data
+      - log:/log
+    deploy:
+      replicas: 1
+
+networks:
+  fs3-net: {}
+
+volumes:
+  data:
+  log:

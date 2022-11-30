@@ -55,7 +55,7 @@ func InitLogger() *log.Logger {
 	} else {
 		prefix = "/log/"
 	}
-	logFile, err := os.OpenFile(prefix+name+".log", os.O_WRONLY|os.O_CREATE, 0666)
+	logFile, err := os.OpenFile(prefix+name+".log", os.O_APPEND|os.O_CREATE, 0666)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "failed to open log file")
 		os.Exit(1)
