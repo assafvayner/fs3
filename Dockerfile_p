@@ -5,7 +5,9 @@ RUN apt-get update -y && apt-get upgrade -y
 RUN apt install make
 
 EXPOSE 5000
-EXPOSE 50000
+
+VOLUME [ "/data" ]
+VOLUME [ "/log" ]
 
 COPY . /fs3
 WORKDIR /fs3
