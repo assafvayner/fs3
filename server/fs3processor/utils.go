@@ -16,10 +16,7 @@ func IsPathSafe(path string) bool {
 }
 
 func MakeServerSidePath(path string) (fullpath string) {
-	fullpath = "data/"
-	if !config.IsDev() {
-		fullpath = "/" + fullpath
-	}
+	fullpath = "/data/"
 	if config.IsPrimary() {
 		fullpath += "p/"
 	} else {

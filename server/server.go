@@ -17,7 +17,7 @@ import (
 func main() {
 	logger := InitLogger()
 
-	ln, err := net.Listen("tcp", fmt.Sprint(":", GetPort()))
+	ln, err := net.Listen("tcp", fmt.Sprint(":", config.GetPort()))
 
 	if err != nil {
 		logger.Fatalln(err)
@@ -33,14 +33,11 @@ func main() {
 		primarybackup.RegisterBackupServer(server, backup.NewBackupHandler(logger))
 	}
 
-	server.Serve(ln)
-}
-
-func GetPort() int {
-	if config.IsPrimary() {
-		return config.PRIMARY_PORT
+	err = server.Serve(ln)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "failed to start server serving")
+		os.Exit(1)
 	}
-	return config.BACKUP_PORT
 }
 
 func InitLogger() *log.Logger {
@@ -50,15 +47,11 @@ func InitLogger() *log.Logger {
 	} else {
 		name = "backup"
 	}
-	if config.IsDev() {
-		prefix = ""
-	} else {
-		prefix = "/log/"
-	}
+	prefix = "/log/"
 	logFile, err := os.OpenFile(prefix+name+".log", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "failed to open log file")
 		os.Exit(1)
 	}
-		return log.New(logFile, name+": ", log.LstdFlags|log.Llongfile|log.Lmsgprefix)
+	return log.New(logFile, name+": ", log.LstdFlags|log.Llongfile|log.Lmsgprefix)
 }

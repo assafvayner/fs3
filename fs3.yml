@@ -1,9 +1,19 @@
 services:
   primary:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: assafvayner/fs3:server
+    environment:
+      - ROLE=primary
+      - PORT=5000
+      - BACKUP_PORT=50000
+    container_name: "primary"
     depends_on:
       - backup
-    image: fs3/primary
     hostname: primary.fs3
+    expose:
+      - "5000"
     ports:
       - "5000:5000"
     networks:
@@ -15,8 +25,17 @@ services:
       replicas: 1
 
   backup:
-    image: fs3/backup
+    # image: assafvayner/fs3:server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backup
+    environment:
+      - ROLE=backup
+      - PORT=50000
     hostname: backup.fs3
+    expose:
+      - "50000"
     ports:
       - "50000:50000"
     networks:
@@ -26,6 +45,19 @@ services:
       - log:/log
     deploy:
       replicas: 1
+  
+  memcached:
+    image: memcached:latest
+    hostname: memcached
+    container_name: memcached_kv_store
+    restart: always
+    environment:
+      - MEMCACHED_CACHE_SIZE=128
+      - MEMCACHED_THREADS=2
+    logging:
+      options:
+        max-size: 50m
+
 
 networks:
   fs3-net: {}

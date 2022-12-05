@@ -55,7 +55,7 @@ func main() {
 		operations.Get(*getRemotePath, getLocalFile)
 	} else {
 		err = fmt.Errorf("bad arguments for fs3")
-		fmt.Fprintf(os.Stderr, parser.Usage(err))
+		fmt.Fprintln(os.Stderr, parser.Usage(err))
 		os.Exit(1)
 	}
 }

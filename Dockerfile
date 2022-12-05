@@ -4,15 +4,10 @@ RUN apt update -y && apt upgrade -y
 RUN apt-get update -y && apt-get upgrade -y
 RUN apt install make
 
-EXPOSE 50000
-
-VOLUME [ "/data" ]
-VOLUME [ "/log" ]
-
 COPY . /fs3
 WORKDIR /fs3
 
 RUN go mod download
 RUN make server -B
 
-CMD [ "server/server", "backup" ]
+CMD [ "server/server" ]

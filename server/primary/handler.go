@@ -39,7 +39,7 @@ func (handler *PrimaryHandler) VerifyPBClient() {
 
 	opts := grpc.WithTransportCredentials(insecure.NewCredentials())
 	// TODO: figure out exactly how to determine backup hostname
-	conn, err := grpc.Dial(fmt.Sprint("backup.fs3:", config.BACKUP_PORT), opts)
+	conn, err := grpc.Dial(fmt.Sprint("backup.fs3:", config.GetBackupPort()), opts)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Could not start a connection to backup")
 		fmt.Fprintln(os.Stderr, "Guess I'll die")

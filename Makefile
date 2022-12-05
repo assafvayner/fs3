@@ -57,31 +57,11 @@ FS3_NET="fs3-net"
 PRIMARY_NAME="primary_container"
 BACKUP_NAME="backup_container"
 
-create_network: FORCE
-	docker network create $(FS3_NET)
+build_server_image: FORCE
+	docker build -t assafvayner/fs3:server -f Dockerfile .
 
-remove_network: FORCE
-	docker network rm $(FS3_NET)
-
-build_p: FORCE
-	docker build -t fs3/primary -f Dockerfile_p .
-
-run_p: FORCE
-	docker run -d -p 127.0.0.1:5000:5000 --hostname primary.fs3 --network $(FS3_NET) --name $(PRIMARY_NAME) fs3/primary
-
-build_b: FORCE
-	docker build -t fs3/backup -f Dockerfile_b .
-
-run_b: FORCE
-	docker run -d -p 127.0.0.1:50000:50000 --hostname backup.fs3 --network $(FS3_NET) --name $(BACKUP_NAME) fs3/backup
-
-shutdown_p: FORCE
-	docker shutdown $(PRIMARY_NAME)
-	docker rm $(PRIMARY_NAME)
-
-shutdown_b: FORCE
-	docker shutdown $(BACKUP_NAME)
-	docker rm $(BACKUP_NAME)
+push_server_image: FORCE
+	docker push assafvayner/fs3:server
 
 up: FORCE
 	docker compose -f fs3.yml up -d --build
