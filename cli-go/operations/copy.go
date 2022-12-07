@@ -11,6 +11,8 @@ import (
 )
 
 func Copy(localFile *os.File, remotePath string) {
+	tokenString := utils.GetToken()
+
 	fileContents, err := os.ReadFile(localFile.Name())
 	localFile.Close()
 	if err != nil {
@@ -25,6 +27,7 @@ func Copy(localFile *os.File, remotePath string) {
 	req := &fs3.CopyRequest{
 		FilePath:    remotePath,
 		FileContent: fileContents,
+		Token:       tokenString,
 	}
 
 	reply, err := client.Copy(ctx, req)

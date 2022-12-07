@@ -11,12 +11,15 @@ import (
 )
 
 func Get(remotePath string, localFile *os.File) {
+	tokenString := utils.GetToken()
+
 	client := utils.GetFs3Client()
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	req := &fs3.GetRequest{
 		FilePath: remotePath,
+		Token:    tokenString,
 	}
 
 	reply, err := client.Get(ctx, req)
@@ -28,7 +31,7 @@ func Get(remotePath string, localFile *os.File) {
 	utils.CheckFilePaths(remotePath, reply.GetFilePath())
 	utils.CheckStatus(reply.GetStatus())
 
-	err = os.WriteFile(localFile.Name(), reply.GetFileContent(), 0666)
+	_, err = localFile.Write(reply.GetFileContent())
 	localFile.Close()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
