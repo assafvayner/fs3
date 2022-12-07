@@ -1,0 +1,94 @@
+services:
+  primary:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: assafvayner/fs3:server
+    environment:
+      - ROLE=primary
+      - PORT=5000
+      - BACKUP_PORT=50000
+      - JWT_PUBLIC_KEY_FILE=/keys/id_ecdsa.pub
+    container_name: "primary"
+    depends_on:
+      - backup
+    hostname: primary.fs3
+    expose:
+      - "5000"
+    ports:
+      - "5000:5000"
+    networks:
+      - fs3-net
+    volumes:
+      - data:/data
+      - log:/log
+    deploy:
+      replicas: 1
+
+  backup:
+    # image: assafvayner/fs3:server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backup
+    environment:
+      - ROLE=backup
+      - PORT=50000
+    hostname: backup.fs3
+    expose:
+      - "50000"
+    ports:
+      - "50000:50000"
+    networks:
+      - fs3-net
+    volumes:
+      - data:/data
+      - log:/log
+    deploy:
+      replicas: 1
+  
+  authservice:
+    depends_on:
+      - redis
+    build:
+      context: .
+      dockerfile: Dockerfile_auth
+    container_name: authservice
+    environment:
+      - PORT=6709
+      - REDIS_PORT=6379
+      - REDIS_HOSTNAME=redis
+      - REDIS_PASSWORD=T3ZN7dFAOvRs422LsFIO
+      - JWT_PRIVATE_KEY_FILE=/keys/id_ecdsa
+      - JWT_PUBLIC_KEY_FILE=/keys/id_ecdsa.pub
+    hostname: auth.fs3
+    expose:
+      - "6709"
+    ports:
+      - "6709:6709"
+    networks:
+      - fs3-net
+    volumes:
+      - log:/log
+    deploy:
+      replicas: 1
+  
+  redis:
+    image: redis:latest
+    hostname: authredis
+    networks:
+      - fs3-net
+    restart: always
+    volumes: 
+      - redis:/data
+    command: redis-server --requirepass T3ZN7dFAOvRs422LsFIO --loglevel warning
+
+
+
+networks:
+  fs3-net: {}
+
+volumes:
+  data:
+  log:
+  redis:

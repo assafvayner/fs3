@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-option go_package = "gitlab.cs.washington.edu/assafv/fs3/protos/primarybackup";
+package primarybackup;
 
 import "fs3.proto";
 
-package primarybackup;
+option go_package = "gitlab.cs.washington.edu/assafv/fs3/protos/primarybackup";
 
-service backup {
+service Backup {
   rpc Forward(ForwardRequest) returns (ForwardReply) {}
 }
 
@@ -22,4 +22,5 @@ message ForwardRequest {
 
 /* empty reply message */
 
-message ForwardReply {}
+message ForwardReply {
+}

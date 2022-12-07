@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package authservice;
+
+option go_package = "gitlab.cs.washington.edu/assafv/fs3/protos/authservice";
+
+service Auth {
+  rpc NewUser(NewUserRequest) returns (NewUserReply) {}
+  rpc GetToken(GetNewTokenRequest) returns (GetNewTokenReply) {}
+}
+
+/* requests */
+
+message NewUserRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message GetNewTokenRequest {
+  string username = 1;
+  string password = 2;
+  string previous_token = 3;
+}
+
+/* replies */
+
+message NewUserReply {
+  string username = 1;
+  message Status {
+    bool success = 1;
+    string message = 2;
+  }
+  Status status = 2;
+}
+
+message GetNewTokenReply {
+  string username = 1;
+  message Status {
+    bool success = 1;
+    string message = 2;
+  }
+  Status status = 2;
+  string token = 3;
+}

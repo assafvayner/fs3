@@ -3,6 +3,51 @@
 CSE 453 Data Center Systems final project
 Assaf Vayner (assafv) + Tom Wu (zw237)
 
+## Summary
+A distributed remote file system with a grpc interface and command line tool to access it.
+
+## Intended Runtime Configuration
+The server nodes for this project are intended to be managed via docker swarm and ran on cloudlab servers.
+While we do backup files we do not currently support a mechanism to make the backup node into the primary node and support allowing the backup to fail indefinitely.
+The client code is also intended to be ran from cloudlab nodes so that they have access to communication without the public internet.
+
+The client consists of 2 completely separate components, firstly a cli tool to make individual requests as proof of concept of the initial intended usage.
+Secondly a python program used to make grpc calls and measure their duration as a method of analyzing performance.
+
+## Instructions to run server
+Tested on wsl/ubuntu mounted, run the following commands (you will need docker installed)
+- `sudo make build_p`
+- `sudo make build_b`
+- `sudo make up`
+
+## Performance analysis
+We intend to analyze performance by varying frequency of requests, and the size of request/response payloads.
+We will attempt to run the server application on containers running on bare metal as well as vms with virtualized storage i/o paths so as to showcase the performance gain of getting direct access to storage hardware.
+
+## Running the applications in development mode
+### Server
+To build the server run `make server` which will generate the `server` executable in the `server` directory (`server/server`).
+
+To run the primary run: `make primary`
+
+To run the backup run: `make backup`
+
+In local development mode you'll want to save the files in the `data` directory as opposed to the privileged `/data` directory. To do this add `stage=dev` to the make commands.
+
+#### *tl;dr*
+`make primary stage=dev`
+
+`make backup stage=dev`
+
+### CLI client
+- run `make fs3_client`
+- Then you will have the `fs3` executable available in the `cli-go` directory
+  - use `./fs3 -h` to see how to use it; briefly:
+    - `./fs3 cp <local_src> <remote_dst>`
+    - `./fs3 rm <remote_path>`
+    - `./fs3 get <remote_src> <local_dst>`
+    - all params are paths
+
 ## Generating Protos
 After acquiring the prerequisites, simply run `make protos` to regenerate.
 
