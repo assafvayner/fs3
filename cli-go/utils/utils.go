@@ -3,9 +3,10 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"os"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"os"
 
 	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
 )
@@ -25,17 +26,17 @@ func GetFs3Client() fs3.Fs3Client {
 }
 
 func CheckStatus(received fs3.Status) {
-  if received == fs3.Status_GREAT_SUCCESS {
-    return
+	if received == fs3.Status_GREAT_SUCCESS {
+		return
 	}
-  fmt.Fprintln(os.Stderr, errors.New("Server returned status: " + received.String()))
-  os.Exit(1)
+	fmt.Fprintln(os.Stderr, errors.New("Server returned status: "+received.String()))
+	os.Exit(1)
 }
 
 func CheckFilePaths(expected, received string) {
-  if received == expected {
-    return
-  }
-  fmt.Fprintln(os.Stderr, errors.New("Server returned bad path: " + received))
-  os.Exit(1)
+	if received == expected {
+		return
+	}
+	fmt.Fprintln(os.Stderr, errors.New("Server returned bad path: "+received))
+	os.Exit(1)
 }

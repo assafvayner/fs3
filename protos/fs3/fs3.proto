@@ -1,20 +1,21 @@
 syntax = "proto3";
 
-option go_package = "gitlab.cs.washington.edu/assafv/fs3/protos/fs3";
-
 package fs3;
 
-service fs3 {
+option go_package = "gitlab.cs.washington.edu/assafv/fs3/protos/fs3";
+
+service Fs3 {
   rpc Copy(CopyRequest) returns (CopyReply) {}
   rpc Remove(RemoveRequest) returns (RemoveReply) {}
   rpc Get(GetRequest) returns (GetReply) {}
 }
 
 enum Status {
-  GREAT_SUCCESS = 0;
-  NOT_FOUND = 1;
-  INTERNAL_ERROR = 2;
-  ILLEGAL_PATH = 3;
+  UNSPECIFIED = 0;
+  GREAT_SUCCESS = 1;
+  NOT_FOUND = 2;
+  INTERNAL_ERROR = 3;
+  ILLEGAL_PATH = 4;
 }
 
 /* requests */
@@ -24,18 +25,21 @@ enum Status {
 message CopyRequest {
   string file_path = 1;
   bytes file_content = 2;
+  string token = 3;
 }
 
 /* request used to remove a file from the server */
 
 message RemoveRequest {
   string file_path = 1;
+  string token = 2;
 }
 
 /* request used to get a file from the server, contents sent back to client */
 
 message GetRequest {
   string file_path = 1;
+  string token = 3;
 }
 
 /* replies */

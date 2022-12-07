@@ -24,8 +24,8 @@ func IsPrimary() bool {
 		return true
 	}
 	if role != "backup" {
-    fmt.Fprint(os.Stderr, role)
-    fmt.Fprint(os.Stderr, "backup")
+		fmt.Fprint(os.Stderr, role)
+		fmt.Fprint(os.Stderr, "backup")
 		fmt.Fprintf(os.Stderr, "Invalid ROLE environment variable, needs primary/backup got: %s\n", role)
 		os.Exit(1)
 	}

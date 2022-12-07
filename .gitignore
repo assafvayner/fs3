@@ -4,3 +4,7 @@ server/server
 venv/*
 cli-go/fs3
 *.log
+
+
+keys/*
+!keys/keygen.go

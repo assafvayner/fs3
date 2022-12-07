@@ -8,6 +8,7 @@ GREAT_SUCCESS: Status
 ILLEGAL_PATH: Status
 INTERNAL_ERROR: Status
 NOT_FOUND: Status
+UNSPECIFIED: Status
 
 class CopyReply(_message.Message):
     __slots__ = ["file_path", "status"]
@@ -18,12 +19,14 @@ class CopyReply(_message.Message):
     def __init__(self, status: _Optional[_Union[Status, str]] = ..., file_path: _Optional[str] = ...) -> None: ...
 
 class CopyRequest(_message.Message):
-    __slots__ = ["file_content", "file_path"]
+    __slots__ = ["file_content", "file_path", "token"]
     FILE_CONTENT_FIELD_NUMBER: _ClassVar[int]
     FILE_PATH_FIELD_NUMBER: _ClassVar[int]
+    TOKEN_FIELD_NUMBER: _ClassVar[int]
     file_content: bytes
     file_path: str
-    def __init__(self, file_path: _Optional[str] = ..., file_content: _Optional[bytes] = ...) -> None: ...
+    token: str
+    def __init__(self, file_path: _Optional[str] = ..., file_content: _Optional[bytes] = ..., token: _Optional[str] = ...) -> None: ...
 
 class GetReply(_message.Message):
     __slots__ = ["file_content", "file_path", "status"]
@@ -36,10 +39,12 @@ class GetReply(_message.Message):
     def __init__(self, status: _Optional[_Union[Status, str]] = ..., file_path: _Optional[str] = ..., file_content: _Optional[bytes] = ...) -> None: ...
 
 class GetRequest(_message.Message):
-    __slots__ = ["file_path"]
+    __slots__ = ["file_path", "token"]
     FILE_PATH_FIELD_NUMBER: _ClassVar[int]
+    TOKEN_FIELD_NUMBER: _ClassVar[int]
     file_path: str
-    def __init__(self, file_path: _Optional[str] = ...) -> None: ...
+    token: str
+    def __init__(self, file_path: _Optional[str] = ..., token: _Optional[str] = ...) -> None: ...
 
 class RemoveReply(_message.Message):
     __slots__ = ["file_path", "status"]
@@ -50,10 +55,12 @@ class RemoveReply(_message.Message):
     def __init__(self, status: _Optional[_Union[Status, str]] = ..., file_path: _Optional[str] = ...) -> None: ...
 
 class RemoveRequest(_message.Message):
-    __slots__ = ["file_path"]
+    __slots__ = ["file_path", "token"]
     FILE_PATH_FIELD_NUMBER: _ClassVar[int]
+    TOKEN_FIELD_NUMBER: _ClassVar[int]
     file_path: str
-    def __init__(self, file_path: _Optional[str] = ...) -> None: ...
+    token: str
+    def __init__(self, file_path: _Optional[str] = ..., token: _Optional[str] = ...) -> None: ...
 
 class Status(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = []

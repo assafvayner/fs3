@@ -37,7 +37,7 @@ func NewFs3Client(cc grpc.ClientConnInterface) Fs3Client {
 
 func (c *fs3Client) Copy(ctx context.Context, in *CopyRequest, opts ...grpc.CallOption) (*CopyReply, error) {
 	out := new(CopyReply)
-	err := c.cc.Invoke(ctx, "/fs3.fs3/Copy", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fs3.Fs3/Copy", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *fs3Client) Copy(ctx context.Context, in *CopyRequest, opts ...grpc.Call
 
 func (c *fs3Client) Remove(ctx context.Context, in *RemoveRequest, opts ...grpc.CallOption) (*RemoveReply, error) {
 	out := new(RemoveReply)
-	err := c.cc.Invoke(ctx, "/fs3.fs3/Remove", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fs3.Fs3/Remove", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (c *fs3Client) Remove(ctx context.Context, in *RemoveRequest, opts ...grpc.
 
 func (c *fs3Client) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetReply, error) {
 	out := new(GetReply)
-	err := c.cc.Invoke(ctx, "/fs3.fs3/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/fs3.Fs3/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func _Fs3_Copy_Handler(srv interface{}, ctx context.Context, dec func(interface{
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fs3.fs3/Copy",
+		FullMethod: "/fs3.Fs3/Copy",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(Fs3Server).Copy(ctx, req.(*CopyRequest))
@@ -126,7 +126,7 @@ func _Fs3_Remove_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fs3.fs3/Remove",
+		FullMethod: "/fs3.Fs3/Remove",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(Fs3Server).Remove(ctx, req.(*RemoveRequest))
@@ -144,7 +144,7 @@ func _Fs3_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/fs3.fs3/Get",
+		FullMethod: "/fs3.Fs3/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(Fs3Server).Get(ctx, req.(*GetRequest))
@@ -156,7 +156,7 @@ func _Fs3_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Fs3_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "fs3.fs3",
+	ServiceName: "fs3.Fs3",
 	HandlerType: (*Fs3Server)(nil),
 	Methods: []grpc.MethodDesc{
 		{

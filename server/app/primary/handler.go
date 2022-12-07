@@ -1,14 +1,14 @@
 package primary
 
 import (
-  "fmt"
+	"fmt"
 	"log"
 	"os"
 
 	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
 	primarybackup "gitlab.cs.washington.edu/assafv/fs3/protos/primarybackup"
-	"gitlab.cs.washington.edu/assafv/fs3/server/config"
-	"gitlab.cs.washington.edu/assafv/fs3/server/fs3processor"
+	"gitlab.cs.washington.edu/assafv/fs3/server/app/config"
+	"gitlab.cs.washington.edu/assafv/fs3/server/app/fs3processor"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -16,17 +16,16 @@ import (
 type PrimaryHandler struct {
 	Fs3processor *fs3processor.Fs3RequestProcessor
 	PBClient     primarybackup.BackupClient
-	Logger			 *log.Logger
+	Logger       *log.Logger
 	fs3.UnimplementedFs3Server
 }
 
 func NewPrimaryHandler(logger *log.Logger) *PrimaryHandler {
-	// need to dial connection to backup
-
+	// PBClient to be lazily dialed later
 	return &PrimaryHandler{
 		Fs3processor: fs3processor.NewFs3RequestProcessor(logger),
 		PBClient:     nil,
-		Logger:				logger,
+		Logger:       logger,
 	}
 }
 

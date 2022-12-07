@@ -15,6 +15,21 @@ fs3_proto: protos/fs3/fs3.proto
 		--grpc_python_out=protos \
 		protos/fs3/fs3.proto
 
+authservice_proto: protos/authservice/authservice.proto
+	protoc \
+		--proto_path=protos/ \
+		--go_out=protos \
+		--go_opt=paths=source_relative \
+		--go-grpc_out=protos \
+		--go-grpc_opt=paths=source_relative \
+		./protos/authservice/authservice.proto
+	python -m grpc_tools.protoc \
+		-Iprotos \
+		--python_out=protos \
+		--pyi_out=protos \
+		--grpc_python_out=protos \
+		protos/authservice/authservice.proto
+
 primarybackup_proto: protos/fs3/fs3.proto protos/primarybackup/primarybackup.proto
 	protoc \
 		--proto_path=protos/ \
@@ -26,18 +41,17 @@ primarybackup_proto: protos/fs3/fs3.proto protos/primarybackup/primarybackup.pro
 		--go-grpc_opt=paths=source_relative \
 		./protos/primarybackup/primarybackup.proto
 
-protos: fs3_proto primarybackup_proto
+protos: fs3_proto primarybackup_proto authservice_proto
 
-SERVER_FILES := $(shell find server -name "*.go")
+SERVER_FILES := $(shell find server/app -name "*.go")
 
 server: $(SERVER_FILES)
-	go build -o server/server server/server.go
+	go build -o server/app/server server/app/server.go
 
-primary: server
-	./server/server primary $(stage)
+AUTH_SERVER_FILES := $(shell find server/auth -name "*.go")
 
-backup: server
-	./server/server backup $(stage)
+authserver: $(AUTH_SERVER_FILES)
+	go build -o server/auth/authserver server/auth/server.go
 
 CLIENT_GO_FILES := $(shell find cli-go -name "*.go")
 
@@ -49,7 +63,8 @@ protos_clean: FORCE
 
 # don't remove protos unless you are able to regenerate them
 clean: FORCE
-	rm -f server/server
+	rm -f server/app/server
+	rm -f server/auth/authserver
 	rm -f cli-go/fs3
 
 # docker related tasks

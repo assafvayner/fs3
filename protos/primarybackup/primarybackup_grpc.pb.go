@@ -35,7 +35,7 @@ func NewBackupClient(cc grpc.ClientConnInterface) BackupClient {
 
 func (c *backupClient) Forward(ctx context.Context, in *ForwardRequest, opts ...grpc.CallOption) (*ForwardReply, error) {
 	out := new(ForwardReply)
-	err := c.cc.Invoke(ctx, "/primarybackup.backup/Forward", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/primarybackup.Backup/Forward", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func _Backup_Forward_Handler(srv interface{}, ctx context.Context, dec func(inte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/primarybackup.backup/Forward",
+		FullMethod: "/primarybackup.Backup/Forward",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BackupServer).Forward(ctx, req.(*ForwardRequest))
@@ -92,7 +92,7 @@ func _Backup_Forward_Handler(srv interface{}, ctx context.Context, dec func(inte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Backup_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "primarybackup.backup",
+	ServiceName: "primarybackup.Backup",
 	HandlerType: (*BackupServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

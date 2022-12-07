@@ -5,7 +5,7 @@ import grpc
 from fs3 import fs3_pb2 as fs3_dot_fs3__pb2
 
 
-class fs3Stub(object):
+class Fs3Stub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -15,23 +15,23 @@ class fs3Stub(object):
             channel: A grpc.Channel.
         """
         self.Copy = channel.unary_unary(
-                '/fs3.fs3/Copy',
+                '/fs3.Fs3/Copy',
                 request_serializer=fs3_dot_fs3__pb2.CopyRequest.SerializeToString,
                 response_deserializer=fs3_dot_fs3__pb2.CopyReply.FromString,
                 )
         self.Remove = channel.unary_unary(
-                '/fs3.fs3/Remove',
+                '/fs3.Fs3/Remove',
                 request_serializer=fs3_dot_fs3__pb2.RemoveRequest.SerializeToString,
                 response_deserializer=fs3_dot_fs3__pb2.RemoveReply.FromString,
                 )
         self.Get = channel.unary_unary(
-                '/fs3.fs3/Get',
+                '/fs3.Fs3/Get',
                 request_serializer=fs3_dot_fs3__pb2.GetRequest.SerializeToString,
                 response_deserializer=fs3_dot_fs3__pb2.GetReply.FromString,
                 )
 
 
-class fs3Servicer(object):
+class Fs3Servicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def Copy(self, request, context):
@@ -53,7 +53,7 @@ class fs3Servicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_fs3Servicer_to_server(servicer, server):
+def add_Fs3Servicer_to_server(servicer, server):
     rpc_method_handlers = {
             'Copy': grpc.unary_unary_rpc_method_handler(
                     servicer.Copy,
@@ -72,12 +72,12 @@ def add_fs3Servicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'fs3.fs3', rpc_method_handlers)
+            'fs3.Fs3', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class fs3(object):
+class Fs3(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -91,7 +91,7 @@ class fs3(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/fs3.fs3/Copy',
+        return grpc.experimental.unary_unary(request, target, '/fs3.Fs3/Copy',
             fs3_dot_fs3__pb2.CopyRequest.SerializeToString,
             fs3_dot_fs3__pb2.CopyReply.FromString,
             options, channel_credentials,
@@ -108,7 +108,7 @@ class fs3(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/fs3.fs3/Remove',
+        return grpc.experimental.unary_unary(request, target, '/fs3.Fs3/Remove',
             fs3_dot_fs3__pb2.RemoveRequest.SerializeToString,
             fs3_dot_fs3__pb2.RemoveReply.FromString,
             options, channel_credentials,
@@ -125,7 +125,7 @@ class fs3(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/fs3.fs3/Get',
+        return grpc.experimental.unary_unary(request, target, '/fs3.Fs3/Get',
             fs3_dot_fs3__pb2.GetRequest.SerializeToString,
             fs3_dot_fs3__pb2.GetReply.FromString,
             options, channel_credentials,

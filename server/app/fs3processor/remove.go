@@ -2,8 +2,10 @@ package fs3processor
 
 import (
 	"errors"
-	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
 	"os"
+
+	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
+	"gitlab.cs.washington.edu/assafv/fs3/server/shared/jwtutils"
 )
 
 func (handler *Fs3RequestProcessor) Remove(req *fs3.RemoveRequest) (reply *fs3.RemoveReply, err error) {
@@ -17,7 +19,9 @@ func (handler *Fs3RequestProcessor) Remove(req *fs3.RemoveRequest) (reply *fs3.R
 		return reply, errors.New("Requested path is not allowed")
 	}
 
-	serverPath := MakeServerSidePath(path)
+	// empty string if global scope
+	username := jwtutils.GetUsernameFromTokenNoValidate(req.GetToken())
+	serverPath := MakeServerSidePath(path, username)
 
 	if FileNotExists(serverPath) {
 		handler.Logger.Printf("Remove request path: %s does not exist\n", req.GetFilePath())

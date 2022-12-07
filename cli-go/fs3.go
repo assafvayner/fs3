@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/akamensky/argparse"
 	"os"
+
+	"github.com/akamensky/argparse"
 
 	"gitlab.cs.washington.edu/assafv/fs3/cli-go/operations"
 )
@@ -17,27 +18,27 @@ func main() {
 	rmCmd := parser.NewCommand("rm", "Remove file from remote server")
 	getCmd := parser.NewCommand("get", "Retreive file from remote server")
 
-// TODO: change local paths to FilePositionals: https://pkg.go.dev/github.com/akamensky/argparse#Command.FilePositional
+	// TODO: change local paths to FilePositionals: https://pkg.go.dev/github.com/akamensky/argparse#Command.FilePositional
 
 	// cpCmd args
 	cpLocalFile := cpCmd.FilePositional(os.O_RDONLY, 0444, &argparse.Options{
 		Help: "local file to copy to server",
 	})
 	cpRemotePath := cpCmd.StringPositional(&argparse.Options{
-		Help:     "remote path to put file on server, relative to root",
+		Help: "remote path to put file on server, relative to root",
 	})
 
 	// rmCmd args
 	rmRemotePath := rmCmd.StringPositional(&argparse.Options{
-		Help:     "remote path to file you want to delete from server",
+		Help: "remote path to file you want to delete from server",
 	})
 
 	// getCmd args
 	getRemotePath := getCmd.StringPositional(&argparse.Options{
-		Help:     "remote path to file to get from server, relative to root",
+		Help: "remote path to file to get from server, relative to root",
 	})
-	getLocalFile := getCmd.FilePositional(os.O_WRONLY | os.O_CREATE, 0666, &argparse.Options{
-		Help:     "local file to write to",
+	getLocalFile := getCmd.FilePositional(os.O_WRONLY|os.O_CREATE, 0666, &argparse.Options{
+		Help: "local file to write to",
 	})
 
 	err := parser.Parse(os.Args)
@@ -59,4 +60,3 @@ func main() {
 		os.Exit(1)
 	}
 }
-

@@ -5,25 +5,28 @@ import (
 	"os"
 	"strings"
 
-	"gitlab.cs.washington.edu/assafv/fs3/server/config"
+	"gitlab.cs.washington.edu/assafv/fs3/server/app/config"
 )
 
 func IsPathSafe(path string) bool {
 	return len(path) < 1000 &&
+		path != "" &&
 		!strings.Contains(path, "..") &&
 		!strings.HasPrefix(path, "/") &&
 		!strings.ContainsAny(path, "\\\r\t\n'\"()[];:,`|{}?!@#$%^&*+=")
 }
 
-func MakeServerSidePath(path string) (fullpath string) {
-	fullpath = "/data/"
+func MakeServerSidePath(path, username string) (prefix string) {
+	prefix = "/data/"
 	if config.IsPrimary() {
-		fullpath += "p/"
+		prefix += "p/"
 	} else {
-		fullpath += "b/"
+		prefix += "b/"
 	}
-	fullpath += path
-	return fullpath
+	if username != "" {
+		prefix += username + "/"
+	}
+	return prefix + path
 }
 
 func FileNotExists(path string) bool {

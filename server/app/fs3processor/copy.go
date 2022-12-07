@@ -2,8 +2,10 @@ package fs3processor
 
 import (
 	"errors"
-	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
 	"os"
+
+	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
+	"gitlab.cs.washington.edu/assafv/fs3/server/shared/jwtutils"
 )
 
 func (handler *Fs3RequestProcessor) Copy(req *fs3.CopyRequest) (reply *fs3.CopyReply, err error) {
@@ -17,7 +19,10 @@ func (handler *Fs3RequestProcessor) Copy(req *fs3.CopyRequest) (reply *fs3.CopyR
 		return reply, errors.New("Requested path is not allowed")
 	}
 
-	serverPath := MakeServerSidePath(path)
+	// empty string if global scope
+	username := jwtutils.GetUsernameFromTokenNoValidate(req.GetToken())
+	serverPath := MakeServerSidePath(path, username)
+
 	pathToFile := GetDirFromFilePath(serverPath)
 	if pathToFile != "" {
 		err = os.MkdirAll(pathToFile, 0777)

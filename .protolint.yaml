@@ -1,0 +1,5 @@
+lint:
+  rules:
+    remove:
+      - ENUM_FIELD_NAMES_PREFIX
+  

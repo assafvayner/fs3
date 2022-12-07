@@ -33,6 +33,6 @@ func Copy(localFile *os.File, remotePath string) {
 		os.Exit(1)
 	}
 
-  utils.CheckFilePaths(remotePath, reply.GetFilePath())
-  utils.CheckStatus(reply.GetStatus())
+	utils.CheckFilePaths(remotePath, reply.GetFilePath())
+	utils.CheckStatus(reply.GetStatus())
 }
