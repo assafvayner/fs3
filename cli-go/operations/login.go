@@ -14,17 +14,31 @@ import (
 	"golang.org/x/term"
 )
 
-func Login(username string) {
+func Login(username string, useToken bool) {
+	var err error
 	client := utils.GetAuthClient()
 
 	if username == "" {
 		username = requestUsername()
 	}
-	password := requestPassword()
+
+	password := ""
+	tokenString := ""
+	if useToken {
+		tokenString, err = utils.ReadToken()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "token error: %s\n", err)
+			tokenString = ""
+		}
+	}
+	if !useToken || tokenString == "" {
+		password = requestPassword()
+	}
 
 	request := &authservice.GetNewTokenRequest{
-		Username: username,
-		Password: password,
+		Username:      username,
+		Password:      password,
+		PreviousToken: tokenString,
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

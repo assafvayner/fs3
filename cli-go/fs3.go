@@ -23,27 +23,27 @@ func main() {
 
 	// cpCmd args
 	cpLocalFile := cpCmd.FilePositional(os.O_RDONLY, 0444, &argparse.Options{
-		Help: "local file to copy to server",
+		Help:     "local file to copy to server",
 		Validate: stringsNotEmpty,
 	})
 	cpRemotePath := cpCmd.StringPositional(&argparse.Options{
-		Help: "remote path to put file on server, relative to root",
+		Help:     "remote path to put file on server, relative to root",
 		Validate: stringsNotEmpty,
 	})
 
 	// rmCmd args
 	rmRemotePath := rmCmd.StringPositional(&argparse.Options{
-		Help: "remote path to file you want to delete from server",
+		Help:     "remote path to file you want to delete from server",
 		Validate: stringsNotEmpty,
 	})
 
 	// getCmd args
 	getRemotePath := getCmd.StringPositional(&argparse.Options{
-		Help: "remote path to file to get from server, relative to root",
+		Help:     "remote path to file to get from server, relative to root",
 		Validate: stringsNotEmpty,
 	})
 	getLocalFile := getCmd.FilePositional(os.O_WRONLY|os.O_CREATE, 0666, &argparse.Options{
-		Help: "local file to write to",
+		Help:     "local file to write to",
 		Validate: stringsNotEmpty,
 	})
 
@@ -52,6 +52,11 @@ func main() {
 		Help:     "your fs3 username",
 		Required: false,
 		Default:  "",
+	})
+	loginUseToken := loginCmd.Flag("t", "use-token", &argparse.Options{
+		Help:     "should we use token to log in, if token invalid will still ask for password",
+		Required: false,
+		Default:  false,
 	})
 
 	// newuserCmd args
@@ -84,7 +89,7 @@ func main() {
 		}
 		operations.Get(*getRemotePath, getLocalFile)
 	} else if loginCmd.Happened() {
-		operations.Login(*loginUsername)
+		operations.Login(*loginUsername, *loginUseToken)
 	} else if newuserCmd.Happened() {
 		operations.NewUser(*newuserUsername, *newuserPassword)
 	} else {

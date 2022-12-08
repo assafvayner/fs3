@@ -20,7 +20,7 @@ func (handler *Fs3RequestProcessor) Get(req *fs3.GetRequest) (reply *fs3.GetRepl
 	}
 
 	// empty string if global scope
-	username := jwtutils.GetUsernameFromTokenNoValidate(req.GetToken())
+	username := jwtutils.GetUsernameFromTokenNoVerify(req.GetToken())
 	serverPath := MakeServerSidePath(path, username)
 
 	if FileNotExists(serverPath) {

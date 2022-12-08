@@ -54,16 +54,25 @@ func GetClaims(token *jwt.Token) (*Fs3JwtClaims, error) {
 	return nil, errors.New("malformed claims")
 }
 
-func GetUsernameFromTokenNoValidate(tokenString string) string {
-	token, err := ParseToken(tokenString, false)
+func getUsernameFromToken(tokenString string, verify bool) (string, error) {
+	token, err := ParseToken(tokenString, verify)
 	if err != nil {
-		return ""
+		return "", err
 	}
 	claims, err := GetClaims(token)
 	if err != nil || claims.Valid() != nil {
-		return ""
+		return "", err
 	}
-	return claims.Username
+	return claims.Username, nil
+}
+
+func GetUsernameFromToken(tokenString string) (string, error) {
+	return getUsernameFromToken(tokenString, true)
+}
+
+func GetUsernameFromTokenNoVerify(tokenString string) string {
+	username, _ := getUsernameFromToken(tokenString, false)
+	return username
 }
 
 func getJwtPublicKey() (*ecdsa.PublicKey, error) {

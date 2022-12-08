@@ -20,7 +20,7 @@ func (handler *Fs3RequestProcessor) Copy(req *fs3.CopyRequest) (reply *fs3.CopyR
 	}
 
 	// empty string if global scope
-	username := jwtutils.GetUsernameFromTokenNoValidate(req.GetToken())
+	username := jwtutils.GetUsernameFromTokenNoVerify(req.GetToken())
 	serverPath := MakeServerSidePath(path, username)
 
 	pathToFile := GetDirFromFilePath(serverPath)
