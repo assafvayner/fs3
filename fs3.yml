@@ -1,8 +1,35 @@
 services:
+  frontend:
+    # image: assafvayner/fs3:frontend
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    environment:
+      - PORT=8080
+      - PRIMARY_PORT=5000
+      - PRIMARY_HOSTNAME=primary.fs3
+      - AUTH_PORT=6709
+      - AUTH_HOSTNAME=auth.fs3
+    depends_on:
+      - primary
+      - authservice
+    hostname: frontend.fs3
+    container_name: "frontend"
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    networks:
+      - fs3-net
+    volumes:
+      - log:/log
+    deploy:
+      replicas: 1
+
   primary:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.pb
     # image: assafvayner/fs3:server
     environment:
       - ROLE=primary
@@ -29,7 +56,7 @@ services:
     # image: assafvayner/fs3:server
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.pb
     container_name: backup
     environment:
       - ROLE=backup
@@ -48,11 +75,12 @@ services:
       replicas: 1
   
   authservice:
+    # image: assafvayner/fs3:authservice
     depends_on:
       - redis
     build:
       context: .
-      dockerfile: Dockerfile_auth
+      dockerfile: Dockerfile.auth
     container_name: authservice
     environment:
       - PORT=6709

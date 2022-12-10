@@ -13,13 +13,19 @@ var ROLE_ENV_VAR = "ROLE"
 var PORT_ENV_VAR = "PORT"
 var BACKUP_PORT_ENV_VAR = "BACKUP_PORT"
 
+var ROLE = ""
+
 func IsPrimary() bool {
+	if ROLE != "" {
+		return ROLE == "primary"
+	}
 	role, gotten := os.LookupEnv(ROLE_ENV_VAR)
 	if !gotten {
 		fmt.Fprintln(os.Stderr, "No ROLE environment variable")
 		os.Exit(1)
 	}
 	role = strings.TrimSpace(role)
+	ROLE = role
 	if role == "primary" {
 		return true
 	}
@@ -30,6 +36,13 @@ func IsPrimary() bool {
 		os.Exit(1)
 	}
 	return false
+}
+
+func GetName() string {
+	if IsPrimary() {
+		return "primary"
+	}
+	return "backup"
 }
 
 func GetPort() int {
