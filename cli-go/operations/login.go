@@ -67,7 +67,7 @@ func requestUsername() string {
 	isEmpty := len(res) == 0
 	for !isValid || isEmpty {
 		if !isValid {
-			fmt.Fprintln(os.Stderr, "username may not contain whitespace")
+			fmt.Fprintln(os.Stderr, "username may not contain whitespace or special characters")
 		}
 		if isEmpty {
 			fmt.Fprintln(os.Stderr, "username cannot be empty")
@@ -113,7 +113,7 @@ func requestPassword() string {
 }
 
 func validateUsername(username string) bool {
-	return regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9]*$`).MatchString(username)
+	return regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_]*$`).MatchString(username)
 }
 
 func validatePassword(password string) bool {

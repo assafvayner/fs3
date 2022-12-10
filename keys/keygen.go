@@ -14,7 +14,7 @@ import (
 // simple program to generate keys
 // heavily inspired by https://gist.github.com/jlhawn/fd35d18ca7342a4fe000
 
-// from keys directory run `go run keygen <optional private key file name>`
+// from keys directory run `go run keygen.go <optional private key file name>`
 
 func main() {
 	filename := "id_ecdsa"

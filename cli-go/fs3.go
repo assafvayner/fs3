@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -23,28 +22,23 @@ func main() {
 
 	// cpCmd args
 	cpLocalFile := cpCmd.FilePositional(os.O_RDONLY, 0444, &argparse.Options{
-		Help:     "local file to copy to server",
-		Validate: stringsNotEmpty,
+		Help: "local file to copy to server",
 	})
 	cpRemotePath := cpCmd.StringPositional(&argparse.Options{
-		Help:     "remote path to put file on server, relative to root",
-		Validate: stringsNotEmpty,
+		Help: "remote path to put file on server, relative to root",
 	})
 
 	// rmCmd args
 	rmRemotePath := rmCmd.StringPositional(&argparse.Options{
-		Help:     "remote path to file you want to delete from server",
-		Validate: stringsNotEmpty,
+		Help: "remote path to file you want to delete from server",
 	})
 
 	// getCmd args
 	getRemotePath := getCmd.StringPositional(&argparse.Options{
-		Help:     "remote path to file to get from server, relative to root",
-		Validate: stringsNotEmpty,
+		Help: "remote path to file to get from server, relative to root",
 	})
 	getLocalFile := getCmd.FilePositional(os.O_WRONLY|os.O_CREATE, 0666, &argparse.Options{
-		Help:     "local file to write to",
-		Validate: stringsNotEmpty,
+		Help: "local file to write to",
 	})
 
 	// loginCmd args
@@ -97,13 +91,4 @@ func main() {
 		fmt.Fprintln(os.Stderr, parser.Usage(err))
 		os.Exit(1)
 	}
-}
-
-func stringsNotEmpty(args []string) error {
-	for _, arg := range args {
-		if len(arg) == 0 {
-			return errors.New("must not provide an empty path")
-		}
-	}
-	return nil
 }
