@@ -11,12 +11,15 @@ import (
 )
 
 func Remove(remotePath string) {
+	tokenString := utils.GetToken()
+
 	client := utils.GetFs3Client()
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	req := &fs3.RemoveRequest{
 		FilePath: remotePath,
+		Token:    tokenString,
 	}
 
 	reply, err := client.Remove(ctx, req)
@@ -26,5 +29,5 @@ func Remove(remotePath string) {
 	}
 
 	utils.CheckFilePaths(remotePath, reply.GetFilePath())
-	utils.CheckStatus(reply.GetStatus())
+	utils.CheckFs3Status(reply.GetStatus())
 }

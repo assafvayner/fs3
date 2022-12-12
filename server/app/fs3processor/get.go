@@ -14,13 +14,13 @@ func (handler *Fs3RequestProcessor) Get(req *fs3.GetRequest) (reply *fs3.GetRepl
 		FilePath: path,
 	}
 	if !IsPathSafe(path) {
-		handler.Logger.Printf("Flagged get request with illegal path: %s\n", req.GetFilePath())
+		handler.Logger.Printf("Flagged get request with illegal path: %s\n", path)
 		reply.Status = fs3.Status_ILLEGAL_PATH
 		return reply, errors.New("Requested path is not allowed")
 	}
 
 	// empty string if global scope
-	username := jwtutils.GetUsernameFromTokenNoValidate(req.GetToken())
+	username := jwtutils.GetUsernameFromTokenNoVerify(req.GetToken())
 	serverPath := MakeServerSidePath(path, username)
 
 	if FileNotExists(serverPath) {

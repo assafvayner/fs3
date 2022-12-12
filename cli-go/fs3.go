@@ -17,8 +17,9 @@ func main() {
 	cpCmd := parser.NewCommand("cp", "Copy local file to remote server")
 	rmCmd := parser.NewCommand("rm", "Remove file from remote server")
 	getCmd := parser.NewCommand("get", "Retreive file from remote server")
-
-	// TODO: change local paths to FilePositionals: https://pkg.go.dev/github.com/akamensky/argparse#Command.FilePositional
+	describeCmd := parser.NewCommand("describe", "Describe a file or directory")
+	loginCmd := parser.NewCommand("login", "Login to use fs3 service in your user context")
+	newuserCmd := parser.NewCommand("newuser", "Create a user to log in to fs3")
 
 	// cpCmd args
 	cpLocalFile := cpCmd.FilePositional(os.O_RDONLY, 0444, &argparse.Options{
@@ -41,6 +42,35 @@ func main() {
 		Help: "local file to write to",
 	})
 
+	// describeCmd args
+	describePath := describeCmd.StringPositional(&argparse.Options{
+		Help: "path of file or directory to describe",
+	})
+
+	// loginCmd args
+	loginUsername := loginCmd.String("u", "username", &argparse.Options{
+		Help:     "your fs3 username",
+		Required: false,
+		Default:  "",
+	})
+	loginUseToken := loginCmd.Flag("t", "use-token", &argparse.Options{
+		Help:     "should we use token to log in, if token invalid will still ask for password",
+		Required: false,
+		Default:  false,
+	})
+
+	// newuserCmd args
+	newuserUsername := newuserCmd.String("u", "username", &argparse.Options{
+		Help:     "your fs3 username",
+		Required: true,
+		Default:  "",
+	})
+	newuserPassword := newuserCmd.String("p", "password", &argparse.Options{
+		Help:     "your desired fs3 password",
+		Required: true,
+		Default:  "",
+	})
+
 	err := parser.Parse(os.Args)
 	if err != nil {
 		fmt.Fprint(os.Stderr, parser.Usage(err))
@@ -53,7 +83,17 @@ func main() {
 	} else if rmCmd.Happened() {
 		operations.Remove(*rmRemotePath)
 	} else if getCmd.Happened() {
+		if argparse.IsNilFile(getLocalFile) {
+			fmt.Fprintln(os.Stderr, "invalid destination file")
+			os.Exit(1)
+		}
 		operations.Get(*getRemotePath, getLocalFile)
+	} else if describeCmd.Happened() {
+		operations.Describe(*describePath)
+	}else if loginCmd.Happened() {
+		operations.Login(*loginUsername, *loginUseToken)
+	} else if newuserCmd.Happened() {
+		operations.NewUser(*newuserUsername, *newuserPassword)
 	} else {
 		err = fmt.Errorf("bad arguments for fs3")
 		fmt.Fprintln(os.Stderr, parser.Usage(err))

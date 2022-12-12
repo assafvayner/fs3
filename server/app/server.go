@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"os"
 
@@ -12,11 +11,12 @@ import (
 	"gitlab.cs.washington.edu/assafv/fs3/server/app/config"
 	"gitlab.cs.washington.edu/assafv/fs3/server/app/primary"
 	"gitlab.cs.washington.edu/assafv/fs3/server/app/primary/interceptor"
+	"gitlab.cs.washington.edu/assafv/fs3/server/shared/loggerutils"
 	"google.golang.org/grpc"
 )
 
 func main() {
-	logger := InitLogger()
+	logger := loggerutils.InitLogger(config.GetName())
 
 	ln, err := net.Listen("tcp", fmt.Sprint(":", config.GetPort()))
 
@@ -41,20 +41,4 @@ func main() {
 		fmt.Fprintln(os.Stderr, "failed to start server serving")
 		os.Exit(1)
 	}
-}
-
-func InitLogger() *log.Logger {
-	var prefix, name string
-	if config.IsPrimary() {
-		name = "primary"
-	} else {
-		name = "backup"
-	}
-	prefix = "/log/"
-	logFile, err := os.OpenFile(prefix+name+".log", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "failed to open log file"+prefix+name+".log")
-		os.Exit(1)
-	}
-	return log.New(logFile, name+": ", log.LstdFlags|log.Llongfile|log.Lmsgprefix)
 }

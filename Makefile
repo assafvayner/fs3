@@ -43,15 +43,22 @@ primarybackup_proto: protos/fs3/fs3.proto protos/primarybackup/primarybackup.pro
 
 protos: fs3_proto primarybackup_proto authservice_proto
 
+SHARED_SERVER_FILES := $(shell find server/shared -name "*.go")
+
 SERVER_FILES := $(shell find server/app -name "*.go")
 
-server: $(SERVER_FILES)
+server: $(SERVER_FILES) $(SHARED_SERVER_FILES)
 	go build -o server/app/server server/app/server.go
 
 AUTH_SERVER_FILES := $(shell find server/auth -name "*.go")
 
-authserver: $(AUTH_SERVER_FILES)
+authserver: $(AUTH_SERVER_FILES) $(SHARED_SERVER_FILES)
 	go build -o server/auth/authserver server/auth/server.go
+
+FRONTEND_SERVER_FILES := $(shell find server/frontend -name "*.go")
+
+frontendserver: $(FRONTEND_SERVER_FILES) $(SHARED_SERVER_FILES)
+	go build -o server/frontend/frontendserver server/frontend/main.go
 
 CLIENT_GO_FILES := $(shell find cli-go -name "*.go")
 
@@ -83,3 +90,18 @@ up: FORCE
 
 down: FORCE
 	docker compose -f fs3.yml down
+
+push: FORCE
+	docker compose -f fs3.yml push
+
+up_no_build: FORCE
+	docker compose -f fs3.yml up -d --no-build
+
+build: FORCE
+	docker compose -f fs3.yml build
+
+stack_up: FORCE
+	docker stack deploy -c fs3.yml fs3stack
+
+stack_down: FORCE
+	docker stack rm fs3stack

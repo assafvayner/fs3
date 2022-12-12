@@ -29,6 +29,11 @@ class Fs3Stub(object):
                 request_serializer=fs3_dot_fs3__pb2.GetRequest.SerializeToString,
                 response_deserializer=fs3_dot_fs3__pb2.GetReply.FromString,
                 )
+        self.Describe = channel.unary_unary(
+                '/fs3.Fs3/Describe',
+                request_serializer=fs3_dot_fs3__pb2.DescribeRequest.SerializeToString,
+                response_deserializer=fs3_dot_fs3__pb2.DescribeReply.FromString,
+                )
 
 
 class Fs3Servicer(object):
@@ -52,6 +57,12 @@ class Fs3Servicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Describe(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_Fs3Servicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -69,6 +80,11 @@ def add_Fs3Servicer_to_server(servicer, server):
                     servicer.Get,
                     request_deserializer=fs3_dot_fs3__pb2.GetRequest.FromString,
                     response_serializer=fs3_dot_fs3__pb2.GetReply.SerializeToString,
+            ),
+            'Describe': grpc.unary_unary_rpc_method_handler(
+                    servicer.Describe,
+                    request_deserializer=fs3_dot_fs3__pb2.DescribeRequest.FromString,
+                    response_serializer=fs3_dot_fs3__pb2.DescribeReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -128,5 +144,22 @@ class Fs3(object):
         return grpc.experimental.unary_unary(request, target, '/fs3.Fs3/Get',
             fs3_dot_fs3__pb2.GetRequest.SerializeToString,
             fs3_dot_fs3__pb2.GetReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Describe(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/fs3.Fs3/Describe',
+            fs3_dot_fs3__pb2.DescribeRequest.SerializeToString,
+            fs3_dot_fs3__pb2.DescribeReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

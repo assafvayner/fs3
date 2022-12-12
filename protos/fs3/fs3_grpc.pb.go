@@ -25,6 +25,7 @@ type Fs3Client interface {
 	Copy(ctx context.Context, in *CopyRequest, opts ...grpc.CallOption) (*CopyReply, error)
 	Remove(ctx context.Context, in *RemoveRequest, opts ...grpc.CallOption) (*RemoveReply, error)
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetReply, error)
+	Describe(ctx context.Context, in *DescribeRequest, opts ...grpc.CallOption) (*DescribeReply, error)
 }
 
 type fs3Client struct {
@@ -62,6 +63,15 @@ func (c *fs3Client) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOp
 	return out, nil
 }
 
+func (c *fs3Client) Describe(ctx context.Context, in *DescribeRequest, opts ...grpc.CallOption) (*DescribeReply, error) {
+	out := new(DescribeReply)
+	err := c.cc.Invoke(ctx, "/fs3.Fs3/Describe", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Fs3Server is the server API for Fs3 service.
 // All implementations must embed UnimplementedFs3Server
 // for forward compatibility
@@ -69,6 +79,7 @@ type Fs3Server interface {
 	Copy(context.Context, *CopyRequest) (*CopyReply, error)
 	Remove(context.Context, *RemoveRequest) (*RemoveReply, error)
 	Get(context.Context, *GetRequest) (*GetReply, error)
+	Describe(context.Context, *DescribeRequest) (*DescribeReply, error)
 	mustEmbedUnimplementedFs3Server()
 }
 
@@ -84,6 +95,9 @@ func (UnimplementedFs3Server) Remove(context.Context, *RemoveRequest) (*RemoveRe
 }
 func (UnimplementedFs3Server) Get(context.Context, *GetRequest) (*GetReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedFs3Server) Describe(context.Context, *DescribeRequest) (*DescribeReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Describe not implemented")
 }
 func (UnimplementedFs3Server) mustEmbedUnimplementedFs3Server() {}
 
@@ -152,6 +166,24 @@ func _Fs3_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Fs3_Describe_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DescribeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Fs3Server).Describe(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/fs3.Fs3/Describe",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Fs3Server).Describe(ctx, req.(*DescribeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Fs3_ServiceDesc is the grpc.ServiceDesc for Fs3 service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +202,10 @@ var Fs3_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Get",
 			Handler:    _Fs3_Get_Handler,
+		},
+		{
+			MethodName: "Describe",
+			Handler:    _Fs3_Describe_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
