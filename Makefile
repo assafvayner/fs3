@@ -99,3 +99,9 @@ up_no_build: FORCE
 
 build: FORCE
 	docker compose -f fs3.yml build
+
+stack_up: FORCE
+	docker stack deploy -c fs3.yml fs3stack
+
+stack_down: FORCE
+	docker stack rm fs3stack

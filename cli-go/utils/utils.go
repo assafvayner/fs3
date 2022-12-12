@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/golang-jwt/jwt/v4"
 	"google.golang.org/grpc"
@@ -18,12 +19,24 @@ type Fs3JwtClaims struct {
 	jwt.RegisteredClaims
 }
 
+func getServerHostname() string {
+	hostname, err := os.Hostname()
+	if err != nil {
+		return "localhost"
+	}
+	if strings.Contains(hostname, "cloudlab") {
+		return "server0"
+	}
+	return "localhost"
+}
+
 /*
  * creates grpc client to make call to fs3 server
  * exits if fails to make a connection
  */
 func GetFs3Client() fs3.Fs3Client {
-	conn, err := grpc.Dial("localhost:5000", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	addr := fmt.Sprintf("%s:5000", getServerHostname())
+	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -49,7 +62,8 @@ func CheckFilePaths(expected, received string) {
 }
 
 func GetAuthClient() authservice.AuthClient {
-	conn, err := grpc.Dial("localhost:6709", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	addr := fmt.Sprintf("%s:6709", getServerHostname())
+	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
