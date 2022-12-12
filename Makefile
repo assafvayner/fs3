@@ -90,3 +90,12 @@ up: FORCE
 
 down: FORCE
 	docker compose -f fs3.yml down
+
+push: FORCE
+	docker compose -f fs3.yml push
+
+up_no_build: FORCE
+	docker compose -f fs3.yml up -d --no-build
+
+build: FORCE
+	docker compose -f fs3.yml build
