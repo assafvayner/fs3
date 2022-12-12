@@ -3,9 +3,9 @@ from fs3.fs3_pb2 import CopyRequest
 from fs3.fs3_pb2 import GetRequest
 from fs3.fs3_pb2 import RemoveRequest
 
+from time import time, sleep
 import grpc
 import argparse
-from time import time, sleep
 import random
 import string
 import os
