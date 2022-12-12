@@ -124,6 +124,9 @@ def main():
             thread.join()
     except:
         raise Exception("Thread error")
+    
+    for item in copy_records.items():
+        print(item)
 
 
 if __name__ == '__main__':
