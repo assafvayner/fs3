@@ -92,7 +92,7 @@ def run_copy_in_thread(file_size, rate_per_second, total_time):
     start_time = time()
     while True:
         loop_start = time()
-        for _ in range(rate_per_second):
+        for _ in range(int(rate_per_second)):
             run_copy(file_size)
         curr_time = time()
         if curr_time - start_time >= total_time:
