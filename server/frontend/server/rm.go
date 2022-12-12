@@ -13,11 +13,13 @@ func (server *FrontendServer) Remove(w http.ResponseWriter, r *http.Request) {
 	if token == "" {
 		server.Logger.Println("get request missing token header")
 		http.Error(w, "Missing token", http.StatusBadRequest)
+		return
 	}
 	filepath := r.URL.Query().Get("file-path")
 	if filepath == "" {
 		server.Logger.Println("request missing file-path query param on remove request")
 		http.Error(w, "Missing file-path", http.StatusBadRequest)
+		return
 	}
 
 	req := &fs3.RemoveRequest{

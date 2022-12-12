@@ -6,10 +6,6 @@ import (
 	"gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
 )
 
-type hasFileContent struct {
-	FileContent string `json:"file-content"`
-}
-
 func GetFs3StatusHttpCode(status fs3.Status) int {
 	switch status {
 	case fs3.Status_GREAT_SUCCESS:

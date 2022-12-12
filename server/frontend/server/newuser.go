@@ -12,11 +12,11 @@ func (server *FrontendServer) NewUser(w http.ResponseWriter, r *http.Request) {
 	password := r.Header.Get("password")
 	if username == "" {
 		http.Error(w, "missing username", http.StatusBadRequest)
-    return
+		return
 	}
 	if password == "" {
 		http.Error(w, "missing password", http.StatusBadRequest)
-    return
+		return
 	}
 
 	req := &authservice.NewUserRequest{

@@ -14,7 +14,7 @@ func (handler *Fs3RequestProcessor) Get(req *fs3.GetRequest) (reply *fs3.GetRepl
 		FilePath: path,
 	}
 	if !IsPathSafe(path) {
-		handler.Logger.Printf("Flagged get request with illegal path: %s\n", req.GetFilePath())
+		handler.Logger.Printf("Flagged get request with illegal path: %s\n", path)
 		reply.Status = fs3.Status_ILLEGAL_PATH
 		return reply, errors.New("Requested path is not allowed")
 	}

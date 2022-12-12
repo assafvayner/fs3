@@ -29,7 +29,7 @@ func Get(remotePath string, localFile *os.File) {
 	}
 
 	utils.CheckFilePaths(remotePath, reply.GetFilePath())
-	utils.CheckStatus(reply.GetStatus())
+	utils.CheckFs3Status(reply.GetStatus())
 
 	_, err = localFile.Write(reply.GetFileContent())
 	localFile.Close()

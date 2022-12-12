@@ -15,6 +15,7 @@ func (server *FrontendServer) Run() error {
 	mux.Handle("/copy", http.HandlerFunc(server.Copy))
 	mux.Handle("/get", http.HandlerFunc(server.Get))
 	mux.Handle("/remove", http.HandlerFunc(server.Remove))
+	mux.Handle("/describe", http.HandlerFunc(server.Describe))
 	mux.Handle("/newuser", http.HandlerFunc(server.NewUser))
 	mux.Handle("/login", http.HandlerFunc(server.Login))
 	srv := &http.Server{

@@ -8,6 +8,7 @@ service Fs3 {
   rpc Copy(CopyRequest) returns (CopyReply) {}
   rpc Remove(RemoveRequest) returns (RemoveReply) {}
   rpc Get(GetRequest) returns (GetReply) {}
+  rpc Describe(DescribeRequest) returns (DescribeReply) {}
 }
 
 enum Status {
@@ -16,6 +17,7 @@ enum Status {
   NOT_FOUND = 2;
   INTERNAL_ERROR = 3;
   ILLEGAL_PATH = 4;
+  BAD_REQUEST = 5;
 }
 
 /* requests */
@@ -39,7 +41,13 @@ message RemoveRequest {
 
 message GetRequest {
   string file_path = 1;
-  string token = 3;
+  string token = 2;
+}
+
+/*request used to get a description of document/directory from server */
+message DescribeRequest {
+  string path = 1;
+  string token = 2;
 }
 
 /* replies */
@@ -67,3 +75,20 @@ message GetReply {
   bytes file_content = 3;
 }
 
+/* reply containing description of file or directory */
+message DescribeReply {
+  Status status = 1;
+  string path = 2;
+  message File {
+    string filename = 1;
+  }
+  message Directory {
+    string directoryname = 1;
+    repeated string files = 2;
+    repeated string subdirectories = 3;
+  }
+  oneof resource {
+    File file = 3;
+    Directory directory = 4;
+  }
+}

@@ -12,33 +12,33 @@ func (server *FrontendServer) Login(w http.ResponseWriter, r *http.Request) {
 	password := r.Header.Get("password")
 	if username == "" {
 		http.Error(w, "missing username", http.StatusBadRequest)
-    return
+		return
 	}
 	if password == "" {
 		http.Error(w, "missing password", http.StatusBadRequest)
-    return
+		return
 	}
-  prevToken := r.Header.Get("token")
+	prevToken := r.Header.Get("token")
 
-  req := &authservice.GetNewTokenRequest{
-    Username: username,
-    Password: password,
-    PreviousToken: prevToken,
-  }
+	req := &authservice.GetNewTokenRequest{
+		Username:      username,
+		Password:      password,
+		PreviousToken: prevToken,
+	}
 
-  server.VerifyAuthClient()
-  reply, err := server.AuthClient.GetToken(r.Context(), req)
-  if err != nil {
-    // TODO determine user not authenticated
-    server.Logger.Printf("authserver returned error for get token for user %s\n", username)
-    http.Error(w, fmt.Sprintf("error from authserver: %s", err), http.StatusInternalServerError)
-    return
-  }
+	server.VerifyAuthClient()
+	reply, err := server.AuthClient.GetToken(r.Context(), req)
+	if err != nil {
+		// TODO determine user not authenticated
+		server.Logger.Printf("authserver returned error for get token for user %s\n", username)
+		http.Error(w, fmt.Sprintf("error from authserver: %s", err), http.StatusInternalServerError)
+		return
+	}
 
-  if !reply.GetStatus().GetSuccess() {
-    server.Logger.Printf("authserver get token not sucessful: %s\n", reply.GetStatus().GetMessage())
-    http.Error(w, fmt.Sprintf("authserver get token not successful: %s", reply.GetStatus().GetMessage()), http.StatusInternalServerError)
-    return    
-  }
-  w.Header().Add("token", reply.GetToken())
+	if !reply.GetStatus().GetSuccess() {
+		server.Logger.Printf("authserver get token not sucessful: %s\n", reply.GetStatus().GetMessage())
+		http.Error(w, fmt.Sprintf("authserver get token not successful: %s", reply.GetStatus().GetMessage()), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Add("token", reply.GetToken())
 }

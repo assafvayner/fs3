@@ -17,6 +17,7 @@ func main() {
 	cpCmd := parser.NewCommand("cp", "Copy local file to remote server")
 	rmCmd := parser.NewCommand("rm", "Remove file from remote server")
 	getCmd := parser.NewCommand("get", "Retreive file from remote server")
+	describeCmd := parser.NewCommand("describe", "Describe a file or directory")
 	loginCmd := parser.NewCommand("login", "Login to use fs3 service in your user context")
 	newuserCmd := parser.NewCommand("newuser", "Create a user to log in to fs3")
 
@@ -39,6 +40,11 @@ func main() {
 	})
 	getLocalFile := getCmd.FilePositional(os.O_WRONLY|os.O_CREATE, 0666, &argparse.Options{
 		Help: "local file to write to",
+	})
+
+	// describeCmd args
+	describePath := describeCmd.StringPositional(&argparse.Options{
+		Help: "path of file or directory to describe",
 	})
 
 	// loginCmd args
@@ -82,7 +88,9 @@ func main() {
 			os.Exit(1)
 		}
 		operations.Get(*getRemotePath, getLocalFile)
-	} else if loginCmd.Happened() {
+	} else if describeCmd.Happened() {
+		operations.Describe(*describePath)
+	}else if loginCmd.Happened() {
 		operations.Login(*loginUsername, *loginUseToken)
 	} else if newuserCmd.Happened() {
 		operations.NewUser(*newuserUsername, *newuserPassword)

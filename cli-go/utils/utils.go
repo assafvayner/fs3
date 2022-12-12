@@ -32,7 +32,7 @@ func GetFs3Client() fs3.Fs3Client {
 	return client
 }
 
-func CheckStatus(received fs3.Status) {
+func CheckFs3Status(received fs3.Status) {
 	if received == fs3.Status_GREAT_SUCCESS {
 		return
 	}

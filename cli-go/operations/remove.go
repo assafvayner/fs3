@@ -29,5 +29,5 @@ func Remove(remotePath string) {
 	}
 
 	utils.CheckFilePaths(remotePath, reply.GetFilePath())
-	utils.CheckStatus(reply.GetStatus())
+	utils.CheckFs3Status(reply.GetStatus())
 }
