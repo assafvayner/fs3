@@ -8,9 +8,12 @@ import time
 import random
 import string
 import os
+import threading
 
 
 ip_address = "localhost:5000"
+thread_num = 2
+
 file_paths = []
 copy_records = {}
 get_records = {}
@@ -83,25 +86,44 @@ def get_file_size(file_path):
     return -1
 
 
-def main():
-    copy_records = {}
-    get_records = {}
-    remove_records = {}
-
+def run_copy_in_thread():
     for i in range(1000, 10000, 500):
         run_copy(i)
-    for item in copy_records.items():
-        print(item)
-    
-    for file_info in copy_records.keys:
-        run_get(file_info[0])
-    for item in get_records.items():
-        print(item)
 
-    for file_info in copy_records.keys:
-        run_remove(file_info[0])
-    for item in remove_records.items():
-        print(item)
+
+def run_get_in_thread(start, end):
+    for index in range(start, end):
+        file_info = copy_records.keys[index]
+        run_get(file_info[0])
+
+
+def run_remove_in_thread(start, end):
+    for index in range(start, end):
+        file_info = copy_records.keys[index]
+        run_remove(file_info[index])
+
+
+def main():
+    copy_records.clear()
+    get_records.clear()
+    remove_records.clear()
+
+    try:
+        def make_threads_for_copy():
+            threads = []
+            for num in thread_num:
+                thread = threading.Thread(target=run_copy_in_thread)
+                threads.insert(num, thread)
+            return threads
+
+        threads = make_threads_for_copy()
+        for thread in threads:
+            thread.start()
+        
+        for thread in threads:
+            thread.join()
+    except:
+        raise Exception("Thread error")
 
 
 if __name__ == '__main__':
