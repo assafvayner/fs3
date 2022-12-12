@@ -4,7 +4,7 @@ from fs3.fs3_pb2 import GetRequest
 from fs3.fs3_pb2 import RemoveRequest
 
 import grpc
-import time
+from time import time, sleep
 import random
 import string
 import os
@@ -12,7 +12,6 @@ import threading
 
 
 ip_address = "localhost:5000"
-thread_num = 2
 
 file_paths = []
 copy_records = {}
@@ -29,11 +28,11 @@ def run_copy(size):
     copy_request = CopyRequest(file_path=path, file_content=content)
 
     try:
-        before = time.time() * 1000
+        before = time() * 1000
         result = client.Copy(copy_request)
-        after = time.time() * 1000
+        after = time() * 1000
         print(result.status)
-        copy_records[(path, size)] = after - before
+        copy_records[(path, size, before)] = after - before
     except:
         raise Exception("Copy request failed")
 
@@ -43,11 +42,11 @@ def run_get(file_path):
     file_size = get_file_size(file_path=file_path)
 
     try:
-        before = time.time() * 1000
+        before = time() * 1000
         result = client.Get(get_request)
-        after = time.time() * 1000
+        after = time() * 1000
         print(result.status)
-        get_records[(file_path, file_size)] = after - before
+        get_records[(file_path, file_size, before)] = after - before
     except:
         raise Exception("Get request failed")
 
@@ -57,11 +56,11 @@ def run_remove(file_path):
     file_size = get_file_size(file_path=file_path)
 
     try:
-        before = time.time() * 1000
+        before = time() * 1000
         result = client.Remove(remove_request)
-        after = time.time() * 1000
+        after = time() * 1000
         print(result.status)
-        remove_records[(file_path, file_size)] = after - before
+        remove_records[(file_path, file_size, before)] = after - before
     except:
         raise Exception("Remove request failed")
 
@@ -72,9 +71,11 @@ def gen_file_content(size):
 
 
 def gen_file_path():
-    file_path = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+    file_path = ''.join(random.choices(
+        string.ascii_letters + string.digits, k=8))
     while file_path in file_paths:
-        file_path = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+        file_path = ''.join(random.choices(
+            string.ascii_letters + string.digits, k=8))
     file_paths.append(file_path)
     return file_path
 
@@ -86,21 +87,30 @@ def get_file_size(file_path):
     return -1
 
 
-def run_copy_in_thread():
-    for i in range(1000, 10000, 500):
-        run_copy(i)
+def run_copy_in_thread(file_size, rate_per_second, total_time):
+    start_time = time()
+    while True:
+        loop_start = time()
+        for _ in range(rate_per_second):
+            run_copy(file_size)
+        curr_time = time()
+        if curr_time - start_time >= total_time:
+            break
+        sec_diff = curr_time - loop_start
+        if sec_diff < 1:
+            sleep(sec_diff)
 
 
-def run_get_in_thread(start, end):
-    for index in range(start, end):
-        file_info = copy_records.keys[index]
-        run_get(file_info[0])
+# def run_get_in_thread(start, end):
+#     for index in range(start, end):
+#         file_info = copy_records.keys[index]
+#         run_get(file_info[0])
 
 
-def run_remove_in_thread(start, end):
-    for index in range(start, end):
-        file_info = copy_records.keys[index]
-        run_remove(file_info[index])
+# def run_remove_in_thread(start, end):
+#     for index in range(start, end):
+#         file_info = copy_records.keys[index]
+#         run_remove(file_info[index])
 
 
 def main():
@@ -108,23 +118,32 @@ def main():
     get_records.clear()
     remove_records.clear()
 
+    total_time = 30
+    file_size = 1000
+    rate_per_sec = 20
+    num_threads = 10
+
+    rate_per_sec_per_thread = rate_per_sec / num_threads
+
     try:
         def make_threads_for_copy():
             threads = []
-            for num in thread_num:
-                thread = threading.Thread(target=run_copy_in_thread)
+            thread_args = (file_size, rate_per_sec_per_thread, total_time)
+            for num in range(num_threads):
+                thread = threading.Thread(
+                    target=run_copy_in_thread, args=thread_args)
                 threads.insert(num, thread)
             return threads
 
         threads = make_threads_for_copy()
         for thread in threads:
             thread.start()
-        
+        sleep(total_time)
         for thread in threads:
             thread.join()
     except:
         raise Exception("Thread error")
-    
+
     for item in copy_records.items():
         print(item)
 
