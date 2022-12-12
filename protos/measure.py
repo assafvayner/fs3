@@ -4,6 +4,7 @@ from fs3.fs3_pb2 import GetRequest
 from fs3.fs3_pb2 import RemoveRequest
 
 import grpc
+import argparse
 from time import time, sleep
 import random
 import string
@@ -101,27 +102,22 @@ def run_copy_in_thread(file_size, rate_per_second, total_time):
             sleep(sec_diff)
 
 
-# def run_get_in_thread(start, end):
-#     for index in range(start, end):
-#         file_info = copy_records.keys[index]
-#         run_get(file_info[0])
-
-
-# def run_remove_in_thread(start, end):
-#     for index in range(start, end):
-#         file_info = copy_records.keys[index]
-#         run_remove(file_info[index])
-
-
 def main():
     copy_records.clear()
     get_records.clear()
     remove_records.clear()
 
-    total_time = 30
-    file_size = 1000
-    rate_per_sec = 20
-    num_threads = 10
+    parser = argparse.ArgumentParser(description="Running fs3 tests")
+    parser.add_argument("file_size", type=int, help="size of the file to copy")
+    parser.add_argument("total_time", type=int, help="total amount of time the test runs (in second)")
+    parser.add_argument("rate_per_second", type=int, help="number of copy operations per second")
+    parser.add_argument("num_threads", type=int, help="number of threads to spawn")
+
+    args = parser.parse_args()
+    file_size = args.file_size
+    total_time = args.total_time
+    rate_per_sec = args.rate_per_second
+    num_threads = args.num_threads
 
     rate_per_sec_per_thread = rate_per_sec / num_threads
 
