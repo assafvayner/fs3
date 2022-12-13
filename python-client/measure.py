@@ -1,30 +1,28 @@
+import threading
+import os
+import string
+import random
+import argparse
+import grpc
+from time import time, sleep
+
+import sys
+sys.path.append(".")
+sys.path.append("./protos/")
 from protos.fs3.fs3_pb2_grpc import Fs3Stub
 from protos.fs3.fs3_pb2 import CopyRequest
 from protos.fs3.fs3_pb2 import GetRequest
 from protos.fs3.fs3_pb2 import RemoveRequest
 
-from time import time, sleep
-import grpc
-import argparse
-import random
-import string
-import os
-import threading
-
-
-ip_address = "localhost:5000"
-
-file_paths = []
+file_paths = set()
 copy_records = {}
 get_records = {}
 remove_records = {}
 
-channel = grpc.insecure_channel(ip_address)
-client = Fs3Stub(channel=channel)
+TEST_START = time()
 
-
-def run_copy(size):
-    path = gen_file_path()
+def run_copy(client, size):
+    path = gen_file_name()
     content = gen_file_content(size)
     copy_request = CopyRequest(file_path=path, file_content=content)
 
@@ -32,74 +30,73 @@ def run_copy(size):
         before = time() * 1000
         result = client.Copy(copy_request)
         after = time() * 1000
-        print(result.status)
-        copy_records[(path, size, before)] = after - before
+        copy_records[(path, size, before - TEST_START)] = after - before
     except:
         raise Exception("Copy request failed")
+    file_paths.add(path)
 
 
-def run_get(file_path):
-    get_request = GetRequest(file_path=file_path)
-    file_size = get_file_size(file_path=file_path)
+# def run_get(file_path):
+#     get_request = GetRequest(file_path=file_path)
+#     file_size = get_file_size(file_path=file_path)
 
-    try:
-        before = time() * 1000
-        result = client.Get(get_request)
-        after = time() * 1000
-        print(result.status)
-        get_records[(file_path, file_size, before)] = after - before
-    except:
-        raise Exception("Get request failed")
+#     try:
+#         before = time() * 1000
+#         result = client.Get(get_request)
+#         after = time() * 1000
+#         print(result.status)
+#         get_records[(file_path, file_size, before)] = after - before
+#     except:
+#         raise Exception("Get request failed")
 
 
-def run_remove(file_path):
-    remove_request = RemoveRequest(file_path=file_path)
-    file_size = get_file_size(file_path=file_path)
+# def run_remove(file_path):
+#     remove_request = RemoveRequest(file_path=file_path)
+#     file_size = get_file_size(file_path=file_path)
 
-    try:
-        before = time() * 1000
-        result = client.Remove(remove_request)
-        after = time() * 1000
-        print(result.status)
-        remove_records[(file_path, file_size, before)] = after - before
-    except:
-        raise Exception("Remove request failed")
+#     try:
+#         before = time() * 1000
+#         result = client.Remove(remove_request)
+#         after = time() * 1000
+#         print(result.status)
+#         remove_records[(file_path, file_size, before)] = after - before
+#     except:
+#         raise Exception("Remove request failed")
 
 
 def gen_file_content(size):
+    """
+    returns randomly generated file contents within visible ascii range such
+    that we may be able to view the generated content on the server
+    """
     content = os.urandom(size)
     return bytes([((x - 33) % (126-33) + 33) for x in content])
 
 
-def gen_file_path():
-    file_path = ''.join(random.choices(
-        string.ascii_letters + string.digits, k=8))
-    while file_path in file_paths:
-        file_path = ''.join(random.choices(
-            string.ascii_letters + string.digits, k=8))
-    file_paths.append(file_path)
-    return file_path
+def gen_file_name(length=12):
+    """
+    generates random file name
+    """
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
 
-def get_file_size(file_path):
-    for pair in copy_records.keys:
-        if file_path in pair:
-            return file_path[1]
-    return -1
 
-
-def run_copy_in_thread(file_size, rate_per_second, total_time):
+def run_copy_in_thread(server_addr, file_size, rate_per_second, total_time):
+    channel = grpc.insecure_channel(server_addr)
+    client = Fs3Stub(channel=channel)
     start_time = time()
     while True:
         loop_start = time()
         for _ in range(int(rate_per_second)):
-            run_copy(file_size)
+            run_copy(client, file_size)
         curr_time = time()
         if curr_time - start_time >= total_time:
             break
         sec_diff = curr_time - loop_start
         if sec_diff < 1:
             sleep(sec_diff)
+    return
+
 
 
 def main():
@@ -108,12 +105,19 @@ def main():
     remove_records.clear()
 
     parser = argparse.ArgumentParser(description="Running fs3 tests")
-    parser.add_argument("file_size", type=int, help="size of the file to copy")
-    parser.add_argument("total_time", type=int, help="total amount of time the test runs (in second)")
-    parser.add_argument("rate_per_second", type=int, help="number of copy operations per second")
-    parser.add_argument("num_threads", type=int, help="number of threads to spawn")
+    parser.add_argument("-s", "--server", type=str, default="localhost:5000",
+                        help="server address from which to make requests")
+    parser.add_argument("-n", "--file_size", type=int, default=1000,
+                        help="size of the file to copy")
+    parser.add_argument("-d", "--total_time", type=int, default=10,
+                        help="total amount of time the test runs (in second)")
+    parser.add_argument("-l", "--rate_per_second", type=int, default=100,
+                        help="number of copy operations per second")
+    parser.add_argument("-t", "--num_threads", type=int, default=10,
+                        help="number of threads to spawn")
 
     args = parser.parse_args()
+    server_addr = args.server
     file_size = args.file_size
     total_time = args.total_time
     rate_per_sec = args.rate_per_second
@@ -124,7 +128,7 @@ def main():
     try:
         def make_threads_for_copy():
             threads = []
-            thread_args = (file_size, rate_per_sec_per_thread, total_time)
+            thread_args = (server_addr, file_size, rate_per_sec_per_thread, total_time)
             for num in range(num_threads):
                 thread = threading.Thread(
                     target=run_copy_in_thread, args=thread_args)
@@ -140,7 +144,9 @@ def main():
     except:
         raise Exception("Thread error")
 
-    for item in copy_records.items():
+    items = copy_records.items()
+    print(len(items))
+    for item in items:
         print(item)
 
 
