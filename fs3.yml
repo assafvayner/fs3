@@ -1,4 +1,4 @@
-verison: "3"
+version: "3"
 services:
   frontend:
     image: assafvayner/fs3:frontend
