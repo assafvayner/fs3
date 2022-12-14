@@ -11,15 +11,13 @@ sys.path.append(".")
 sys.path.append("./protos/")
 from protos.fs3.fs3_pb2_grpc import Fs3Stub
 from protos.fs3.fs3_pb2 import CopyRequest
-from protos.fs3.fs3_pb2 import GetRequest
-from protos.fs3.fs3_pb2 import RemoveRequest
 
 file_paths = set()
 copy_records = {}
 get_records = {}
 remove_records = {}
 
-TEST_START = time()
+TEST_START = time() * 1000
 
 def run_copy(client, size):
     path = gen_file_name()
@@ -28,40 +26,12 @@ def run_copy(client, size):
 
     try:
         before = time() * 1000
-        result = client.Copy(copy_request)
+        client.Copy(copy_request)
         after = time() * 1000
         copy_records[(path, size, before - TEST_START)] = after - before
     except:
         raise Exception("Copy request failed")
     file_paths.add(path)
-
-
-# def run_get(file_path):
-#     get_request = GetRequest(file_path=file_path)
-#     file_size = get_file_size(file_path=file_path)
-
-#     try:
-#         before = time() * 1000
-#         result = client.Get(get_request)
-#         after = time() * 1000
-#         print(result.status)
-#         get_records[(file_path, file_size, before)] = after - before
-#     except:
-#         raise Exception("Get request failed")
-
-
-# def run_remove(file_path):
-#     remove_request = RemoveRequest(file_path=file_path)
-#     file_size = get_file_size(file_path=file_path)
-
-#     try:
-#         before = time() * 1000
-#         result = client.Remove(remove_request)
-#         after = time() * 1000
-#         print(result.status)
-#         remove_records[(file_path, file_size, before)] = after - before
-#     except:
-#         raise Exception("Remove request failed")
 
 
 def gen_file_content(size):
@@ -80,7 +50,6 @@ def gen_file_name(length=12):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
 
-
 def run_copy_in_thread(server_addr, file_size, rate_per_second, total_time):
     channel = grpc.insecure_channel(server_addr)
     client = Fs3Stub(channel=channel)
@@ -96,7 +65,6 @@ def run_copy_in_thread(server_addr, file_size, rate_per_second, total_time):
         if sec_diff < 1:
             sleep(sec_diff)
     return
-
 
 
 def main():
