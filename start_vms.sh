@@ -133,7 +133,7 @@ done
 wait
 
 # Install DeathStarBench
-sudo lxc file push hotelreservation.yml vm1/root/
+sudo lxc file push fs3.yml vm1/root/
 sudo lxc exec vm1 -- sh -c "sudo docker swarm init"
 
 JOIN_COMMAND=$(sudo lxc exec vm1 -- sh -c "sudo docker swarm join-token worker | awk '/docker/ {print $1}'")

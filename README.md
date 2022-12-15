@@ -5,39 +5,52 @@ Assaf Vayner (assafv) + Tom Wu (zw237)
 
 ## Summary
 A distributed remote file system with a grpc interface and command line tool to access it.
+Jwt-dispensing authorization service that allows per user separation of access to files.
+Http frontend server to utilize the system from a web context over cli/scripts.
 
 ## Intended Runtime Configuration
 The server nodes for this project are intended to be managed via docker swarm and ran on cloudlab servers.
+There are make commands as well as instructions below to make running the application simply
 While we do backup files we do not currently support a mechanism to make the backup node into the primary node and support allowing the backup to fail indefinitely.
 The client code is also intended to be ran from cloudlab nodes so that they have access to communication without the public internet.
 
 The client consists of 2 completely separate components, firstly a cli tool to make individual requests as proof of concept of the initial intended usage.
 Secondly a python program used to make grpc calls and measure their duration as a method of analyzing performance.
 
-## Instructions to run server
-Tested on wsl/ubuntu mounted, run the following commands (you will need docker installed)
-- `sudo make build_p`
-- `sudo make build_b`
-- `sudo make up`
+We have used BloomRPC to test grpc APIs as well as Postman to test http apis
+
+## Instructions to run
+### Server in development
+Tested on wsl/ubuntu mounted and mac, run the following commands (you will need docker installed)
+- `sudo make up` - build the application and run it
+  - if you wish to use the authservice, you will have to run `go run keygen.go` in the keys directory first
+- `sudo make up_no_build` will pull prebuilt images from dockerhub so you don't need to build the application.
+
+You can run the clients locally, compile the cli via `make fs3_client`
+
+### Server on cloudlab
+On cloudlab, first run `./start_docker.sh` in `/local/repository`
+- then you can run `sudo make stack_up` which is an alias for `sudo docker stack deply -c fs3.yml fs3` to utilize the swarm
+- you can also run on vms by running our `start_vms.sh` and then following the instructions from [CSE 453 lab 0](https://gitlab.cs.washington.edu/syslab/cse453-cloud-project/-/blob/main/docs/lab0.md#run-deathstarbench-in-vms-and-test-it) except change the last greyed out command to:
+  - `sudo lxc exec vm1 -- docker stack deploy --compose-file fs3.yml fs3`
+
+### Testing on cloudlab client
+- option 1 running the python testing scripts:
+  - we require some dependencies that are missing under the current config, run the following:
+    - `wget https://bootstrap.pypa.io/get-pip.py`
+    - `python3 get-pip.py`
+    - `python3 -m pip install -r requirements.txt`
+- option 2 using cli
+  - first install go, run the following commands:
+    - `wget https://go.dev/dl/go1.19.4.linux-amd64.tar.gz`
+    - `sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.19.4.linux-amd64.tar.gz`
+  - then run `make fs3_client`
+  - the cli will be the resulting executable in `cli-go/fs3`
+  - use `./fs3 -h` to get the options you can use
 
 ## Performance analysis
 We intend to analyze performance by varying frequency of requests, and the size of request/response payloads.
 We will attempt to run the server application on containers running on bare metal as well as vms with virtualized storage i/o paths so as to showcase the performance gain of getting direct access to storage hardware.
-
-## Running the applications in development mode
-### Server
-To build the server run `make server` which will generate the `server` executable in the `server` directory (`server/server`).
-
-To run the primary run: `make primary`
-
-To run the backup run: `make backup`
-
-In local development mode you'll want to save the files in the `data` directory as opposed to the privileged `/data` directory. To do this add `stage=dev` to the make commands.
-
-#### *tl;dr*
-`make primary stage=dev`
-
-`make backup stage=dev`
 
 ### CLI client
 - run `make fs3_client`
@@ -47,6 +60,8 @@ In local development mode you'll want to save the files in the `data` directory 
     - `./fs3 rm <remote_path>`
     - `./fs3 get <remote_src> <local_dst>`
     - all params are paths
+  - There are other commands for using the authservice as well as describing resources
+    - run `./fs3 -h` to see them
 
 ## Generating Protos
 After acquiring the prerequisites, simply run `make protos` to regenerate.
