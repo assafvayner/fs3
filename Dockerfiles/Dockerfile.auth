@@ -1,6 +1,7 @@
 FROM assafvayner/fs3:base
 
 COPY keys/jwt/id_ecdsa /keys/id_ecdsa
+COPY keys/jwt/id_ecdsa.pub /keys/id_ecdsa.pub
 
 WORKDIR /fs3
 
