@@ -1,4 +1,4 @@
-module gitlab.cs.washington.edu/assafv/fs3
+module github.com/assafvayner/fs3
 
 go 1.19
 

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package fs3;
 
-option go_package = "gitlab.cs.washington.edu/assafv/fs3/protos/fs3";
+option go_package = "github.com/assafvayner/fs3/protos/fs3";
 
 service Fs3 {
   rpc Copy(CopyRequest) returns (CopyReply) {}

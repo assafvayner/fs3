@@ -5,12 +5,15 @@ import (
 	"errors"
 	"fmt"
 
-	"gitlab.cs.washington.edu/assafv/fs3/protos/authservice"
-	"gitlab.cs.washington.edu/assafv/fs3/server/shared/jwtutils"
+	"github.com/assafvayner/fs3/protos/authservice"
+	"github.com/assafvayner/fs3/server/shared/jwtutils"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (handler *AuthServiceHandler) GetToken(ctx context.Context, req *authservice.GetNewTokenRequest) (*authservice.GetNewTokenReply, error) {
+func (handler *AuthServiceHandler) GetToken(
+	ctx context.Context,
+	req *authservice.GetNewTokenRequest,
+) (*authservice.GetNewTokenReply, error) {
 	reply := &authservice.GetNewTokenReply{
 		Username: req.GetUsername(),
 	}
@@ -25,7 +28,11 @@ func (handler *AuthServiceHandler) GetToken(ctx context.Context, req *authservic
 
 	token, err := GetToken(req.GetUsername())
 	if err != nil {
-		handler.Logger.Printf("GetToken: failed to get token for authorized user: %s, err: %s\n", req.Username, err)
+		handler.Logger.Printf(
+			"GetToken: failed to get token for authorized user: %s, err: %s\n",
+			req.Username,
+			err,
+		)
 		reply.Status = &authservice.GetNewTokenReply_Status{
 			Success: false,
 			Message: "internal error",
@@ -47,7 +54,11 @@ func (handler *AuthServiceHandler) authenticateUser(username, password, prevToke
 		// user previous token validity to authorize user
 		usernameFromToken, err := jwtutils.GetUsernameFromToken(prevToken)
 		if err == nil && usernameFromToken == username {
-			handler.Logger.Printf("authorized user %s given previous token %s\n", username, prevToken)
+			handler.Logger.Printf(
+				"authorized user %s given previous token %s\n",
+				username,
+				prevToken,
+			)
 			return nil
 		}
 	}
@@ -57,12 +68,20 @@ func (handler *AuthServiceHandler) authenticateUser(username, password, prevToke
 
 	passwordHash, err := handler.RedisClient.Get(context.Background(), usernameKey).Result()
 	if err != nil {
-		handler.Logger.Printf("GetToken: Error from redis for username: %s, err: %s\n", username, err)
+		handler.Logger.Printf(
+			"GetToken: Error from redis for username: %s, err: %s\n",
+			username,
+			err,
+		)
 		return errors.New("internal error")
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(password))
 	if err != nil {
-		handler.Logger.Printf("GetToken: Error from bcrypt compare password for username: %s, err: %s\n", username, err)
+		handler.Logger.Printf(
+			"GetToken: Error from bcrypt compare password for username: %s, err: %s\n",
+			username,
+			err,
+		)
 		return errors.New("password does not match")
 	}
 

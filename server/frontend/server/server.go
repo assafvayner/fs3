@@ -6,10 +6,10 @@ import (
 	"os"
 	"strconv"
 
-	"gitlab.cs.washington.edu/assafv/fs3/protos/authservice"
-	"gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
+	"github.com/assafvayner/fs3/protos/authservice"
+	"github.com/assafvayner/fs3/protos/fs3"
+	"github.com/assafvayner/fs3/server/shared/tlsutils"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 const AUTH_HOSTNAME_ENV_VAR = "AUTH_HOSTNAME"
@@ -35,11 +35,17 @@ func (server *FrontendServer) VerifyFs3Client() {
 	if server.Fs3Client != nil {
 		return
 	}
-	conn, err := grpc.Dial(getPrimaryAddress(), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	tlsCredentials, err := tlsutils.GetClientTLSCredentials()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "could not create a connection to the primary server")
-		fmt.Fprintln(os.Stderr, "guess I'll die")
-		os.Exit(1)
+		server.Logger.Fatalln("Could not get tls credentials to communicate with backup, big problem")
+	}
+
+	conn, err := grpc.Dial(
+		getPrimaryAddress(),
+		grpc.WithTransportCredentials(tlsCredentials),
+	)
+	if err != nil {
+		server.Logger.Fatalln("could not create a connection to the primary server")
 	}
 	server.Fs3Client = fs3.NewFs3Client(conn)
 }
@@ -48,11 +54,16 @@ func (server *FrontendServer) VerifyAuthClient() {
 	if server.Fs3Client != nil {
 		return
 	}
-	conn, err := grpc.Dial(getAuthAddress(), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	tlsCredentials, err := tlsutils.GetClientTLSCredentials()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "could not create a connection to the auth server")
-		fmt.Fprintln(os.Stderr, "guess I'll die")
-		os.Exit(1)
+		server.Logger.Fatalf("Could not get tls credentials to communicate with backup, big problem: %s", err)
+	}
+	conn, err := grpc.Dial(
+		getAuthAddress(),
+		grpc.WithTransportCredentials(tlsCredentials),
+	)
+	if err != nil {
+		server.Logger.Fatalf("could not create a connection to the auth server: %s", err)
 	}
 	server.AuthClient = authservice.NewAuthClient(conn)
 }

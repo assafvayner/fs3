@@ -5,11 +5,13 @@ import (
 	"os"
 	"path"
 
-	"gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
-	"gitlab.cs.washington.edu/assafv/fs3/server/shared/jwtutils"
+	"github.com/assafvayner/fs3/protos/fs3"
+	"github.com/assafvayner/fs3/server/shared/jwtutils"
 )
 
-func (handler *Fs3RequestProcessor) Describe(req *fs3.DescribeRequest) (reply *fs3.DescribeReply, err error) {
+func (handler *Fs3RequestProcessor) Describe(
+	req *fs3.DescribeRequest,
+) (reply *fs3.DescribeReply, err error) {
 	requestedPath := req.GetPath()
 	reply = &fs3.DescribeReply{
 		Path: requestedPath,
@@ -39,7 +41,10 @@ func (handler *Fs3RequestProcessor) Describe(req *fs3.DescribeRequest) (reply *f
 	}
 
 	if finfo.Mode().IsRegular() {
-		handler.Logger.Printf("Describe successfully %s is neither regular file or directory", serverPath)
+		handler.Logger.Printf(
+			"Describe successfully %s is neither regular file or directory",
+			serverPath,
+		)
 		reply.Resource = &fs3.DescribeReply_File_{
 			File: &fs3.DescribeReply_File{
 				Filename: finfo.Name(),
@@ -50,7 +55,10 @@ func (handler *Fs3RequestProcessor) Describe(req *fs3.DescribeRequest) (reply *f
 		return
 	}
 	if !finfo.Mode().IsDir() {
-		handler.Logger.Printf("user requested resource: %s is neither regular file or directory", serverPath)
+		handler.Logger.Printf(
+			"user requested resource: %s is neither regular file or directory",
+			serverPath,
+		)
 		reply.Status = fs3.Status_INTERNAL_ERROR
 		err = errors.New("requested resource is neither a file not a directory")
 		return

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package authservice;
 
-option go_package = "gitlab.cs.washington.edu/assafv/fs3/protos/authservice";
+option go_package = "github.com/assafvayner/fs3/protos/authservice";
 
 service Auth {
   rpc NewUser(NewUserRequest) returns (NewUserReply) {}

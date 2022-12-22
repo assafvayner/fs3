@@ -4,10 +4,13 @@ import (
 	"context"
 	"errors"
 
-	primarybackup "gitlab.cs.washington.edu/assafv/fs3/protos/primarybackup"
+	primarybackup "github.com/assafvayner/fs3/protos/primarybackup"
 )
 
-func (handler *BackupHandler) Forward(ctx context.Context, req *primarybackup.ForwardRequest) (reply *primarybackup.ForwardReply, err error) {
+func (handler *BackupHandler) Forward(
+	ctx context.Context,
+	req *primarybackup.ForwardRequest,
+) (reply *primarybackup.ForwardReply, err error) {
 	reply = &primarybackup.ForwardReply{}
 
 	fs3CopyRequest := req.GetCopyRequest()

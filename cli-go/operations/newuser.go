@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"gitlab.cs.washington.edu/assafv/fs3/cli-go/utils"
-	"gitlab.cs.washington.edu/assafv/fs3/protos/authservice"
+	"github.com/assafvayner/fs3/cli-go/utils"
+	"github.com/assafvayner/fs3/protos/authservice"
 )
 
 func NewUser(username, password string) {

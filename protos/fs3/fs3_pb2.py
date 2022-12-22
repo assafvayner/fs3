@@ -13,16 +13,16 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rfs3/fs3.proto\x12\x03\x66s3\"E\n\x0b\x43opyRequest\x12\x11\n\tfile_path\x18\x01 \x01(\t\x12\x14\n\x0c\x66ile_content\x18\x02 \x01(\x0c\x12\r\n\x05token\x18\x03 \x01(\t\"1\n\rRemoveRequest\x12\x11\n\tfile_path\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\".\n\nGetRequest\x12\x11\n\tfile_path\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\".\n\x0f\x44\x65scribeRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\";\n\tCopyReply\x12\x1b\n\x06status\x18\x01 \x01(\x0e\x32\x0b.fs3.Status\x12\x11\n\tfile_path\x18\x02 \x01(\t\"=\n\x0bRemoveReply\x12\x1b\n\x06status\x18\x01 \x01(\x0e\x32\x0b.fs3.Status\x12\x11\n\tfile_path\x18\x02 \x01(\t\"P\n\x08GetReply\x12\x1b\n\x06status\x18\x01 \x01(\x0e\x32\x0b.fs3.Status\x12\x11\n\tfile_path\x18\x02 \x01(\t\x12\x14\n\x0c\x66ile_content\x18\x03 \x01(\x0c\"\x87\x02\n\rDescribeReply\x12\x1b\n\x06status\x18\x01 \x01(\x0e\x32\x0b.fs3.Status\x12\x0c\n\x04path\x18\x02 \x01(\t\x12\'\n\x04\x66ile\x18\x03 \x01(\x0b\x32\x17.fs3.DescribeReply.FileH\x00\x12\x31\n\tdirectory\x18\x04 \x01(\x0b\x32\x1c.fs3.DescribeReply.DirectoryH\x00\x1a\x18\n\x04\x46ile\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x1aI\n\tDirectory\x12\x15\n\rdirectoryname\x18\x01 \x01(\t\x12\r\n\x05\x66iles\x18\x02 \x03(\t\x12\x16\n\x0esubdirectories\x18\x03 \x03(\tB\n\n\x08resource*a\n\x06Status\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x11\n\rGREAT_SUCCESS\x10\x01\x12\r\n\tNOT_FOUND\x10\x02\x12\x12\n\x0eINTERNAL_ERROR\x10\x03\x12\x10\n\x0cILLEGAL_PATH\x10\x04\x32\xc4\x01\n\x03\x46s3\x12*\n\x04\x43opy\x12\x10.fs3.CopyRequest\x1a\x0e.fs3.CopyReply\"\x00\x12\x30\n\x06Remove\x12\x12.fs3.RemoveRequest\x1a\x10.fs3.RemoveReply\"\x00\x12\'\n\x03Get\x12\x0f.fs3.GetRequest\x1a\r.fs3.GetReply\"\x00\x12\x36\n\x08\x44\x65scribe\x12\x14.fs3.DescribeRequest\x1a\x12.fs3.DescribeReply\"\x00\x42\x30Z.gitlab.cs.washington.edu/assafv/fs3/protos/fs3b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rfs3/fs3.proto\x12\x03\x66s3\"E\n\x0b\x43opyRequest\x12\x11\n\tfile_path\x18\x01 \x01(\t\x12\x14\n\x0c\x66ile_content\x18\x02 \x01(\x0c\x12\r\n\x05token\x18\x03 \x01(\t\"1\n\rRemoveRequest\x12\x11\n\tfile_path\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\".\n\nGetRequest\x12\x11\n\tfile_path\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\".\n\x0f\x44\x65scribeRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\";\n\tCopyReply\x12\x1b\n\x06status\x18\x01 \x01(\x0e\x32\x0b.fs3.Status\x12\x11\n\tfile_path\x18\x02 \x01(\t\"=\n\x0bRemoveReply\x12\x1b\n\x06status\x18\x01 \x01(\x0e\x32\x0b.fs3.Status\x12\x11\n\tfile_path\x18\x02 \x01(\t\"P\n\x08GetReply\x12\x1b\n\x06status\x18\x01 \x01(\x0e\x32\x0b.fs3.Status\x12\x11\n\tfile_path\x18\x02 \x01(\t\x12\x14\n\x0c\x66ile_content\x18\x03 \x01(\x0c\"\x87\x02\n\rDescribeReply\x12\x1b\n\x06status\x18\x01 \x01(\x0e\x32\x0b.fs3.Status\x12\x0c\n\x04path\x18\x02 \x01(\t\x12\'\n\x04\x66ile\x18\x03 \x01(\x0b\x32\x17.fs3.DescribeReply.FileH\x00\x12\x31\n\tdirectory\x18\x04 \x01(\x0b\x32\x1c.fs3.DescribeReply.DirectoryH\x00\x1a\x18\n\x04\x46ile\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x1aI\n\tDirectory\x12\x15\n\rdirectoryname\x18\x01 \x01(\t\x12\r\n\x05\x66iles\x18\x02 \x03(\t\x12\x16\n\x0esubdirectories\x18\x03 \x03(\tB\n\n\x08resource*r\n\x06Status\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x11\n\rGREAT_SUCCESS\x10\x01\x12\r\n\tNOT_FOUND\x10\x02\x12\x12\n\x0eINTERNAL_ERROR\x10\x03\x12\x10\n\x0cILLEGAL_PATH\x10\x04\x12\x0f\n\x0b\x42\x41\x44_REQUEST\x10\x05\x32\xc4\x01\n\x03\x46s3\x12*\n\x04\x43opy\x12\x10.fs3.CopyRequest\x1a\x0e.fs3.CopyReply\"\x00\x12\x30\n\x06Remove\x12\x12.fs3.RemoveRequest\x1a\x10.fs3.RemoveReply\"\x00\x12\'\n\x03Get\x12\x0f.fs3.GetRequest\x1a\r.fs3.GetReply\"\x00\x12\x36\n\x08\x44\x65scribe\x12\x14.fs3.DescribeRequest\x1a\x12.fs3.DescribeReply\"\x00\x42\'Z%github.com/assafvayner/fs3/protos/fs3b\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'fs3.fs3_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  DESCRIPTOR._serialized_options = b'Z.gitlab.cs.washington.edu/assafv/fs3/protos/fs3'
+  DESCRIPTOR._serialized_options = b'Z%github.com/assafvayner/fs3/protos/fs3'
   _STATUS._serialized_start=712
-  _STATUS._serialized_end=809
+  _STATUS._serialized_end=826
   _COPYREQUEST._serialized_start=22
   _COPYREQUEST._serialized_end=91
   _REMOVEREQUEST._serialized_start=93
@@ -43,6 +43,6 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _DESCRIBEREPLY_FILE._serialized_end=623
   _DESCRIBEREPLY_DIRECTORY._serialized_start=625
   _DESCRIBEREPLY_DIRECTORY._serialized_end=698
-  _FS3._serialized_start=812
-  _FS3._serialized_end=1008
+  _FS3._serialized_start=829
+  _FS3._serialized_end=1025
 # @@protoc_insertion_point(module_scope)

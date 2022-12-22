@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"gitlab.cs.washington.edu/assafv/fs3/server/app/config"
+	"github.com/assafvayner/fs3/server/app/config"
 )
 
 func IsPathSafe(path string) bool {

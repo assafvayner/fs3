@@ -7,10 +7,11 @@ import (
 
 	"google.golang.org/grpc"
 
-	"gitlab.cs.washington.edu/assafv/fs3/protos/authservice"
-	"gitlab.cs.washington.edu/assafv/fs3/server/auth/config"
-	"gitlab.cs.washington.edu/assafv/fs3/server/auth/service"
-	"gitlab.cs.washington.edu/assafv/fs3/server/shared/loggerutils"
+	"github.com/assafvayner/fs3/protos/authservice"
+	"github.com/assafvayner/fs3/server/auth/config"
+	"github.com/assafvayner/fs3/server/auth/service"
+	"github.com/assafvayner/fs3/server/shared/loggerutils"
+	"github.com/assafvayner/fs3/server/shared/tlsutils"
 )
 
 func main() {
@@ -19,11 +20,17 @@ func main() {
 	ln, err := net.Listen("tcp", fmt.Sprint(":", config.GetPort()))
 	if err != nil {
 		logger.Fatalln(err)
-		os.Exit(1)
 	}
 	defer ln.Close()
 
-	server := grpc.NewServer()
+	tlsCredentials, err := tlsutils.GetServerTLSCredentials()
+	if err != nil {
+		logger.Fatalln(err)
+	}
+
+	server := grpc.NewServer(
+		grpc.Creds(tlsCredentials),
+	)
 	authservice.RegisterAuthServer(server, service.NewAuthServiceHandler(logger))
 
 	err = server.Serve(ln)

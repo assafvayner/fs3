@@ -6,9 +6,9 @@ import (
 	"errors"
 	"time"
 
+	"github.com/assafvayner/fs3/server/auth/config"
+	"github.com/assafvayner/fs3/server/shared/jwtutils"
 	"github.com/golang-jwt/jwt/v4"
-	"gitlab.cs.washington.edu/assafv/fs3/server/auth/config"
-	"gitlab.cs.washington.edu/assafv/fs3/server/shared/jwtutils"
 )
 
 func GetKeyFromUsername(username string) string {

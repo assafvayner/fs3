@@ -4,6 +4,7 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Mapping, Optional as _Optional, Union as _Union
 
+BAD_REQUEST: Status
 DESCRIPTOR: _descriptor.FileDescriptor
 GREAT_SUCCESS: Status
 ILLEGAL_PATH: Status

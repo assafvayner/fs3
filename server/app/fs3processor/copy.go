@@ -4,8 +4,8 @@ import (
 	"errors"
 	"os"
 
-	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
-	"gitlab.cs.washington.edu/assafv/fs3/server/shared/jwtutils"
+	fs3 "github.com/assafvayner/fs3/protos/fs3"
+	"github.com/assafvayner/fs3/server/shared/jwtutils"
 )
 
 func (handler *Fs3RequestProcessor) Copy(req *fs3.CopyRequest) (reply *fs3.CopyReply, err error) {

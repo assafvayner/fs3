@@ -10,8 +10,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"gitlab.cs.washington.edu/assafv/fs3/protos/authservice"
-	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
+	"github.com/assafvayner/fs3/protos/authservice"
+	fs3 "github.com/assafvayner/fs3/protos/fs3"
 )
 
 type Fs3JwtClaims struct {

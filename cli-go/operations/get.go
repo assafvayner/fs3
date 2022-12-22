@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"gitlab.cs.washington.edu/assafv/fs3/cli-go/utils"
-	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
+	"github.com/assafvayner/fs3/cli-go/utils"
+	fs3 "github.com/assafvayner/fs3/protos/fs3"
 )
 
 func Get(remotePath string, localFile *os.File) {

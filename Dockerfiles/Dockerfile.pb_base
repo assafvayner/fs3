@@ -1,0 +1,7 @@
+FROM assafvayner/fs3:base
+
+COPY keys/jwt/id_ecdsa.pub /keys/id_ecdsa.pub
+
+WORKDIR /fs3
+
+RUN go build -o server/app/server server/app/server.go 

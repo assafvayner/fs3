@@ -19,6 +19,7 @@ remove_records = {}
 
 TEST_START = time() * 1000
 
+
 def run_copy(client, size):
     path = gen_file_name()
     content = gen_file_content(size)
@@ -96,7 +97,8 @@ def main():
     try:
         def make_threads_for_copy():
             threads = []
-            thread_args = (server_addr, file_size, rate_per_sec_per_thread, total_time)
+            thread_args = (server_addr, file_size,
+                           rate_per_sec_per_thread, total_time)
             for num in range(num_threads):
                 thread = threading.Thread(
                     target=run_copy_in_thread, args=thread_args)

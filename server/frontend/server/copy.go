@@ -5,7 +5,7 @@ import (
 	"io"
 	"net/http"
 
-	"gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
+	"github.com/assafvayner/fs3/protos/fs3"
 )
 
 func (server *FrontendServer) Copy(w http.ResponseWriter, r *http.Request) {

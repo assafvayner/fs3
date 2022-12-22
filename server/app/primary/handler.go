@@ -3,14 +3,13 @@ package primary
 import (
 	"fmt"
 	"log"
-	"os"
 
-	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
-	primarybackup "gitlab.cs.washington.edu/assafv/fs3/protos/primarybackup"
-	"gitlab.cs.washington.edu/assafv/fs3/server/app/config"
-	"gitlab.cs.washington.edu/assafv/fs3/server/app/fs3processor"
+	fs3 "github.com/assafvayner/fs3/protos/fs3"
+	primarybackup "github.com/assafvayner/fs3/protos/primarybackup"
+	"github.com/assafvayner/fs3/server/app/config"
+	"github.com/assafvayner/fs3/server/app/fs3processor"
+	"github.com/assafvayner/fs3/server/shared/tlsutils"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 type PrimaryHandler struct {
@@ -36,13 +35,15 @@ func (handler *PrimaryHandler) VerifyPBClient() {
 		return
 	}
 
-	opts := grpc.WithTransportCredentials(insecure.NewCredentials())
-	// TODO: figure out exactly how to determine backup hostname
-	conn, err := grpc.Dial(fmt.Sprint("backup.fs3:", config.GetBackupPort()), opts)
+	tlsCredentials, err := tlsutils.GetClientTLSCredentials()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Could not start a connection to backup")
-		fmt.Fprintln(os.Stderr, "Guess I'll die")
-		os.Exit(1)
+		handler.Logger.Fatalln("Could not get tls credentials to communicate with backup, big problem")
+	}
+
+	// TODO: figure out exactly how to determine backup hostname
+	conn, err := grpc.Dial(fmt.Sprint("backup.fs3:", config.GetBackupPort()), grpc.WithTransportCredentials(tlsCredentials))
+	if err != nil {
+		handler.Logger.Fatalln("Could not start a connection to backup")
 	}
 	handler.PBClient = primarybackup.NewBackupClient(conn)
 }

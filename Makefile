@@ -79,13 +79,13 @@ FS3_NET="fs3-net"
 PRIMARY_NAME="primary_container"
 BACKUP_NAME="backup_container"
 
-build_server_image: FORCE
-	docker build -t assafvayner/fs3:server -f Dockerfile .
+base: Dockerfiles/Dockerfile.base
+	docker build -t assafvayner/fs3:base -f Dockerfiles/Dockerfile.base .
 
-push_server_image: FORCE
-	docker push assafvayner/fs3:server
+pbbase: Dockerfiles/Dockerfile.pb_base base
+	docker build -t assafvayner/fs3:pb_base -f Dockerfiles/Dockerfile.pb_base .
 
-up: FORCE
+up: base pbbase FORCE
 	docker compose -f fs3.yml up -d --build
 
 down: FORCE

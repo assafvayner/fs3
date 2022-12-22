@@ -1,0 +1,5 @@
+FROM assafvayner/fs3:pb_base
+
+COPY keys/grpc-tls/primary/* /certificates
+
+CMD [ "server/app/server" ]

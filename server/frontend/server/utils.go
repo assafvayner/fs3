@@ -3,7 +3,7 @@ package server
 import (
 	"net/http"
 
-	"gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
+	"github.com/assafvayner/fs3/protos/fs3"
 )
 
 func GetFs3StatusHttpCode(status fs3.Status) int {

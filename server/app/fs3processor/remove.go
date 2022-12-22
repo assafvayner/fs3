@@ -4,11 +4,13 @@ import (
 	"errors"
 	"os"
 
-	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
-	"gitlab.cs.washington.edu/assafv/fs3/server/shared/jwtutils"
+	fs3 "github.com/assafvayner/fs3/protos/fs3"
+	"github.com/assafvayner/fs3/server/shared/jwtutils"
 )
 
-func (handler *Fs3RequestProcessor) Remove(req *fs3.RemoveRequest) (reply *fs3.RemoveReply, err error) {
+func (handler *Fs3RequestProcessor) Remove(
+	req *fs3.RemoveRequest,
+) (reply *fs3.RemoveReply, err error) {
 	path := req.GetFilePath()
 	reply = &fs3.RemoveReply{
 		FilePath: path,

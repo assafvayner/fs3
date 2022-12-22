@@ -4,13 +4,16 @@ services:
     image: assafvayner/fs3:frontend
     build:
       context: .
-      dockerfile: Dockerfile.frontend
+      dockerfile: Dockerfiles/Dockerfile.frontend
     environment:
       - PORT=8080
       - PRIMARY_PORT=5000
       - PRIMARY_HOSTNAME=primary.fs3
       - AUTH_PORT=6709
       - AUTH_HOSTNAME=auth.fs3
+      - FS3_SIGNED_CERTIFICATE_PATH=/certificates/server-cert.pem
+      - FS3_SIGNED_KEY_PATH=/certificates/server-key.pem
+      - FS3_CA_PATH=/certificates/fs3-ca-cert.pem
     depends_on:
       - primary
       - authservice
@@ -18,6 +21,7 @@ services:
     container_name: "frontend"
     expose:
       - "8080"
+      - "443"
     ports:
       - "8080:8080"
     networks:
@@ -28,21 +32,25 @@ services:
       replicas: 1
 
   primary:
-    image: assafvayner/fs3:server
+    image: assafvayner/fs3:primary
     build:
       context: .
-      dockerfile: Dockerfile.pb
+      dockerfile: Dockerfiles/Dockerfile.primary
     environment:
       - ROLE=primary
       - PORT=5000
       - BACKUP_PORT=50000
       - JWT_PUBLIC_KEY_FILE=/keys/id_ecdsa.pub
+      - FS3_SIGNED_CERTIFICATE_PATH=/certificates/server-cert.pem
+      - FS3_SIGNED_KEY_PATH=/certificates/server-key.pem
+      - FS3_CA_PATH=/certificates/fs3-ca-cert.pem
     container_name: "primary"
     depends_on:
       - backup
     hostname: primary.fs3
     expose:
       - "5000"
+      - "443"
     ports:
       - "5000:5000"
     networks:
@@ -54,17 +62,21 @@ services:
       replicas: 1
 
   backup:
-    image: assafvayner/fs3:server
+    image: assafvayner/fs3:backup
     build:
       context: .
-      dockerfile: Dockerfile.pb
+      dockerfile: Dockerfiles/Dockerfile.backup
     container_name: backup
     environment:
       - ROLE=backup
       - PORT=50000
+      - FS3_SIGNED_CERTIFICATE_PATH=/certificates/server-cert.pem
+      - FS3_SIGNED_KEY_PATH=/certificates/server-key.pem
+      - FS3_CA_PATH=/certificates/fs3-ca-cert.pem
     hostname: backup.fs3
     expose:
       - "50000"
+      - "443"
     ports:
       - "50000:50000"
     networks:
@@ -81,7 +93,7 @@ services:
       - redis
     build:
       context: .
-      dockerfile: Dockerfile.auth
+      dockerfile: Dockerfiles/Dockerfile.auth
     container_name: authservice
     environment:
       - PORT=6709
@@ -90,9 +102,13 @@ services:
       - REDIS_PASSWORD=T3ZN7dFAOvRs422LsFIO
       - JWT_PRIVATE_KEY_FILE=/keys/id_ecdsa
       - JWT_PUBLIC_KEY_FILE=/keys/id_ecdsa.pub
+      - FS3_SIGNED_CERTIFICATE_PATH=/certificates/server-cert.pem
+      - FS3_SIGNED_KEY_PATH=/certificates/server-key.pem
+      - FS3_CA_PATH=/certificates/fs3-ca-cert.pem
     hostname: auth.fs3
     expose:
       - "6709"
+      - "443"
     ports:
       - "6709:6709"
     networks:

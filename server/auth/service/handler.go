@@ -4,9 +4,9 @@ import (
 	"log"
 	"time"
 
+	"github.com/assafvayner/fs3/protos/authservice"
+	"github.com/assafvayner/fs3/server/auth/config"
 	"github.com/go-redis/redis/v9"
-	"gitlab.cs.washington.edu/assafv/fs3/protos/authservice"
-	"gitlab.cs.washington.edu/assafv/fs3/server/auth/config"
 )
 
 type AuthServiceHandler struct {

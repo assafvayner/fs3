@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"gitlab.cs.washington.edu/assafv/fs3/protos/authservice"
+	"github.com/assafvayner/fs3/protos/authservice"
 )
 
 func (server *FrontendServer) NewUser(w http.ResponseWriter, r *http.Request) {
@@ -28,13 +28,20 @@ func (server *FrontendServer) NewUser(w http.ResponseWriter, r *http.Request) {
 	reply, err := server.AuthClient.NewUser(r.Context(), req)
 	if err != nil {
 		server.Logger.Printf("Error in request to authserver: %s\n", err)
-		// TODO: determine if the error is a login error
-		http.Error(w, fmt.Sprintf("Error forwarding request: %s", err), http.StatusInternalServerError)
+		http.Error(
+			w,
+			fmt.Sprintf("Error forwarding request: %s", err),
+			http.StatusInternalServerError,
+		)
 		return
 	}
 	if !reply.GetStatus().GetSuccess() {
 		server.Logger.Printf("authserver failed for user %s\n", username)
-		http.Error(w, fmt.Sprintf("Error from authserver: %s", reply.GetStatus().GetMessage()), http.StatusInternalServerError)
+		http.Error(
+			w,
+			fmt.Sprintf("Error from authserver: %s", reply.GetStatus().GetMessage()),
+			http.StatusInternalServerError,
+		)
 		return
 	}
 }

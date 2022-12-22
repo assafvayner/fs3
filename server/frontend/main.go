@@ -5,8 +5,8 @@ import (
 	"os"
 	"strconv"
 
-	"gitlab.cs.washington.edu/assafv/fs3/server/frontend/server"
-	"gitlab.cs.washington.edu/assafv/fs3/server/shared/loggerutils"
+	"github.com/assafvayner/fs3/server/frontend/server"
+	"github.com/assafvayner/fs3/server/shared/loggerutils"
 )
 
 const PORT_ENV_VAR = "PORT"

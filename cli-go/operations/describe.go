@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"gitlab.cs.washington.edu/assafv/fs3/cli-go/utils"
-	"gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
+	"github.com/assafvayner/fs3/cli-go/utils"
+	"github.com/assafvayner/fs3/protos/fs3"
 )
 
 func Describe(path string) {
@@ -45,14 +45,14 @@ func Describe(path string) {
 			fmt.Printf("  %s\n", file)
 		}
 	} else {
-    fmt.Println(" no files")
-  }
-  if subdirs := dir.GetSubdirectories(); len(subdirs) != 0 {
+		fmt.Println(" no files")
+	}
+	if subdirs := dir.GetSubdirectories(); len(subdirs) != 0 {
 		fmt.Println(" subdirectories:")
 		for _, subdir := range subdirs {
 			fmt.Printf("  %s\n", subdir)
 		}
 	} else {
-    fmt.Println(" no subdirectories")
-  }
+		fmt.Println(" no subdirectories")
+	}
 }

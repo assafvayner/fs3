@@ -3,11 +3,14 @@ package primary
 import (
 	"context"
 
-	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/fs3"
-	primarybackup "gitlab.cs.washington.edu/assafv/fs3/protos/primarybackup"
+	fs3 "github.com/assafvayner/fs3/protos/fs3"
+	primarybackup "github.com/assafvayner/fs3/protos/primarybackup"
 )
 
-func (handler *PrimaryHandler) Copy(ctx context.Context, req *fs3.CopyRequest) (reply *fs3.CopyReply, err error) {
+func (handler *PrimaryHandler) Copy(
+	ctx context.Context,
+	req *fs3.CopyRequest,
+) (reply *fs3.CopyReply, err error) {
 	handler.VerifyPBClient()
 
 	// do something with req
@@ -19,7 +22,11 @@ func (handler *PrimaryHandler) Copy(ctx context.Context, req *fs3.CopyRequest) (
 
 	_, err = handler.PBClient.Forward(ctx, forwardReq)
 	if err != nil {
-		handler.Logger.Printf("error on forward for copy file <%s>, err: %s\n", req.GetFilePath(), err)
+		handler.Logger.Printf(
+			"error on forward for copy file <%s>, err: %s\n",
+			req.GetFilePath(),
+			err,
+		)
 		return nil, err
 	}
 

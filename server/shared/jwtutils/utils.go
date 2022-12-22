@@ -33,9 +33,13 @@ func ParseToken(tokenString string, validate bool) (*jwt.Token, error) {
 		token, _, err := jwtParser.ParseUnverified(tokenString, &Fs3JwtClaims{})
 		return token, err
 	}
-	token, err := jwtParser.ParseWithClaims(tokenString, &Fs3JwtClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return getJwtPublicKey()
-	})
+	token, err := jwtParser.ParseWithClaims(
+		tokenString,
+		&Fs3JwtClaims{},
+		func(token *jwt.Token) (interface{}, error) {
+			return getJwtPublicKey()
+		},
+	)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error parsing token: %s\n", err)
 		return nil, err

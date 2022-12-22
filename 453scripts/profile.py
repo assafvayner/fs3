@@ -1,3 +1,7 @@
+"""
+to utilize cloudlab would need to move this file and init.sh to project root
+"""
+
 """cse453 default profile to run DeathStarBench.
 
 This profile is sourced from the cse453 gitlab repo at

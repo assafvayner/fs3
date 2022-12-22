@@ -13,14 +13,14 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1d\x61uthservice/authservice.proto\x12\x0b\x61uthservice\"4\n\x0eNewUserRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"P\n\x12GetNewTokenRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x16\n\x0eprevious_token\x18\x03 \x01(\t\"~\n\x0cNewUserReply\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x30\n\x06status\x18\x02 \x01(\x0b\x32 .authservice.NewUserReply.Status\x1a*\n\x06Status\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"\x95\x01\n\x10GetNewTokenReply\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x34\n\x06status\x18\x02 \x01(\x0b\x32$.authservice.GetNewTokenReply.Status\x12\r\n\x05token\x18\x03 \x01(\t\x1a*\n\x06Status\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2\x99\x01\n\x04\x41uth\x12\x43\n\x07NewUser\x12\x1b.authservice.NewUserRequest\x1a\x19.authservice.NewUserReply\"\x00\x12L\n\x08GetToken\x12\x1f.authservice.GetNewTokenRequest\x1a\x1d.authservice.GetNewTokenReply\"\x00\x42\x38Z6gitlab.cs.washington.edu/assafv/fs3/protos/authserviceb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1d\x61uthservice/authservice.proto\x12\x0b\x61uthservice\"4\n\x0eNewUserRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"P\n\x12GetNewTokenRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x16\n\x0eprevious_token\x18\x03 \x01(\t\"~\n\x0cNewUserReply\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x30\n\x06status\x18\x02 \x01(\x0b\x32 .authservice.NewUserReply.Status\x1a*\n\x06Status\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"\x95\x01\n\x10GetNewTokenReply\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x34\n\x06status\x18\x02 \x01(\x0b\x32$.authservice.GetNewTokenReply.Status\x12\r\n\x05token\x18\x03 \x01(\t\x1a*\n\x06Status\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2\x99\x01\n\x04\x41uth\x12\x43\n\x07NewUser\x12\x1b.authservice.NewUserRequest\x1a\x19.authservice.NewUserReply\"\x00\x12L\n\x08GetToken\x12\x1f.authservice.GetNewTokenRequest\x1a\x1d.authservice.GetNewTokenReply\"\x00\x42/Z-github.com/assafvayner/fs3/protos/authserviceb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'authservice.authservice_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  DESCRIPTOR._serialized_options = b'Z6gitlab.cs.washington.edu/assafv/fs3/protos/authservice'
+  DESCRIPTOR._serialized_options = b'Z-github.com/assafvayner/fs3/protos/authservice'
   _NEWUSERREQUEST._serialized_start=46
   _NEWUSERREQUEST._serialized_end=98
   _GETNEWTOKENREQUEST._serialized_start=100

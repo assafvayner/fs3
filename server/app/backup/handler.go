@@ -3,8 +3,8 @@ package backup
 import (
 	"log"
 
-	fs3 "gitlab.cs.washington.edu/assafv/fs3/protos/primarybackup"
-	"gitlab.cs.washington.edu/assafv/fs3/server/app/fs3processor"
+	fs3 "github.com/assafvayner/fs3/protos/primarybackup"
+	"github.com/assafvayner/fs3/server/app/fs3processor"
 )
 
 type BackupHandler struct {

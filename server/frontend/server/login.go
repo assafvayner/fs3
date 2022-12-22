@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"gitlab.cs.washington.edu/assafv/fs3/protos/authservice"
+	"github.com/assafvayner/fs3/protos/authservice"
 )
 
 func (server *FrontendServer) Login(w http.ResponseWriter, r *http.Request) {
@@ -36,8 +36,15 @@ func (server *FrontendServer) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !reply.GetStatus().GetSuccess() {
-		server.Logger.Printf("authserver get token not sucessful: %s\n", reply.GetStatus().GetMessage())
-		http.Error(w, fmt.Sprintf("authserver get token not successful: %s", reply.GetStatus().GetMessage()), http.StatusInternalServerError)
+		server.Logger.Printf(
+			"authserver get token not sucessful: %s\n",
+			reply.GetStatus().GetMessage(),
+		)
+		http.Error(
+			w,
+			fmt.Sprintf("authserver get token not successful: %s", reply.GetStatus().GetMessage()),
+			http.StatusInternalServerError,
+		)
 		return
 	}
 	w.Header().Add("token", reply.GetToken())

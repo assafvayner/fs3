@@ -6,10 +6,12 @@ import (
 
 	"github.com/akamensky/argparse"
 
-	"gitlab.cs.washington.edu/assafv/fs3/cli-go/operations"
+	"github.com/assafvayner/fs3/cli-go/operations"
 )
 
 func main() {
+	fmt.Fprintln(os.Stderr, "defunct until converted to use http frontend, grpc interface blocked to internal service communication")
+	os.Exit(1)
 	// defining parser to parse args to run operation
 	parser := argparse.NewParser("fs3", "fs3 command line tool to copy/remote/get files from remote server")
 
@@ -90,7 +92,7 @@ func main() {
 		operations.Get(*getRemotePath, getLocalFile)
 	} else if describeCmd.Happened() {
 		operations.Describe(*describePath)
-	}else if loginCmd.Happened() {
+	} else if loginCmd.Happened() {
 		operations.Login(*loginUsername, *loginUseToken)
 	} else if newuserCmd.Happened() {
 		operations.NewUser(*newuserUsername, *newuserPassword)

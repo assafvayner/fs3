@@ -1,4 +1,11 @@
 run:
   skip-dirs:
     - protos
-  color: auto  
+  color: auto
+  linters-settings:
+    goimports:
+      local-prefixes: github.com/assafvayner/fs3
+  linters:
+    enable:
+      - goimports
+      - gofmt

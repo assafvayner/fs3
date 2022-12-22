@@ -4,11 +4,14 @@ import (
 	"context"
 	"errors"
 
-	"gitlab.cs.washington.edu/assafv/fs3/protos/authservice"
+	"github.com/assafvayner/fs3/protos/authservice"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (handler *AuthServiceHandler) NewUser(ctx context.Context, req *authservice.NewUserRequest) (*authservice.NewUserReply, error) {
+func (handler *AuthServiceHandler) NewUser(
+	ctx context.Context,
+	req *authservice.NewUserRequest,
+) (*authservice.NewUserReply, error) {
 	handler.VerifyRedisClient()
 
 	reply := &authservice.NewUserReply{
@@ -19,7 +22,11 @@ func (handler *AuthServiceHandler) NewUser(ctx context.Context, req *authservice
 
 	userExistsCopies, err := handler.RedisClient.Exists(context.Background(), usernameKey).Result()
 	if err != nil {
-		handler.Logger.Printf("NewUser: Failed to check if user %s exists already; err: %s\n", req.GetUsername(), err)
+		handler.Logger.Printf(
+			"NewUser: Failed to check if user %s exists already; err: %s\n",
+			req.GetUsername(),
+			err,
+		)
 		return internalError(reply)
 	}
 	if userExistsCopies != 0 {
@@ -32,7 +39,11 @@ func (handler *AuthServiceHandler) NewUser(ctx context.Context, req *authservice
 
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(req.GetPassword()), bcrypt.DefaultCost)
 	if err != nil {
-		handler.Logger.Printf("NewUser: Failed to hash password for new user %s exists already; err: %s\n", req.GetUsername(), err)
+		handler.Logger.Printf(
+			"NewUser: Failed to hash password for new user %s exists already; err: %s\n",
+			req.GetUsername(),
+			err,
+		)
 		return internalError(reply)
 	}
 

@@ -1,4 +1,7 @@
 venv
+test_data
+python-client
+cli-go
 *.yaml
 *.yml
 .*

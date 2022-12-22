@@ -1,0 +1,7 @@
+FROM assafvayner/fs3:base
+
+RUN go build -o server/frontend/frontendserver server/frontend/main.go
+
+COPY keys/grpc-tls/frontend/* /certificates
+
+CMD [ "server/frontend/frontendserver" ]

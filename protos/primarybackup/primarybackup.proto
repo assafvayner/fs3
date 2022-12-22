@@ -4,7 +4,7 @@ package primarybackup;
 
 import "fs3.proto";
 
-option go_package = "gitlab.cs.washington.edu/assafv/fs3/protos/primarybackup";
+option go_package = "github.com/assafvayner/fs3/protos/primarybackup";
 
 service Backup {
   rpc Forward(ForwardRequest) returns (ForwardReply) {}

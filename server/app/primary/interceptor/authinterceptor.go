@@ -5,7 +5,7 @@ import (
 	"errors"
 	"log"
 
-	"gitlab.cs.washington.edu/assafv/fs3/server/shared/jwtutils"
+	"github.com/assafvayner/fs3/server/shared/jwtutils"
 	"google.golang.org/grpc"
 )
 
@@ -44,12 +44,20 @@ func validateToken(tokenString string, logger *log.Logger) error {
 	}
 	claims, err := jwtutils.GetClaims(token)
 	if err != nil {
-		logger.Printf("Primary;Copy; Failed to get valid claims on token: %s, err: %s\n", tokenString, err)
+		logger.Printf(
+			"Primary;Copy; Failed to get valid claims on token: %s, err: %s\n",
+			tokenString,
+			err,
+		)
 		return errors.New("error getting claims from token")
 	}
 	// should check request is within the right amount of time too?
 	if err = claims.Valid(); err != nil {
-		logger.Printf("Primary;Copy; Token claims not valid, token: %s, err: %s\n", tokenString, err)
+		logger.Printf(
+			"Primary;Copy; Token claims not valid, token: %s, err: %s\n",
+			tokenString,
+			err,
+		)
 		return errors.New("error getting claims from token")
 	}
 	return nil
