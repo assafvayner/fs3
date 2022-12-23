@@ -1,10 +1,8 @@
 FROM golang:1.19-bullseye
 
-COPY . /fs3
-
-COPY keys/grpc-tls/fs3-ca-cert.pem /usr/local/share/ca-certificates/fs3-ca.crt
-RUN chmod 644 /usr/local/share/ca-certificates/fs3-ca.crt
-RUN update-ca-certificates
+COPY server /fs3/server
+COPY go.* /fs3
+COPY protos /fs3/protos
 
 RUN mkdir /certificates
 COPY keys/grpc-tls/fs3-ca-cert.pem /certificates

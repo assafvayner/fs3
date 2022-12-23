@@ -92,6 +92,8 @@ down: FORCE
 	docker compose -f fs3.yml down
 
 push: FORCE
+	docker push assafvayner/fs3:base
+	docker push assafvayner/fs3:pb_base
 	docker compose -f fs3.yml push
 
 up_no_build: FORCE

@@ -2,10 +2,9 @@ package fs3processor
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strings"
-
-	"github.com/assafvayner/fs3/server/app/config"
 )
 
 func IsPathSafe(path string) bool {
@@ -17,16 +16,7 @@ func IsPathSafe(path string) bool {
 }
 
 func MakeServerSidePath(path, username string) (prefix string) {
-	prefix = "/data/"
-	if config.IsPrimary() {
-		prefix += "p/"
-	} else {
-		prefix += "b/"
-	}
-	if username != "" {
-		prefix += username + "/"
-	}
-	return prefix + path
+	return fmt.Sprintf("/data/%s/%s", username, path)
 }
 
 func FileNotExists(path string) bool {

@@ -22,8 +22,7 @@ func GetAuthInterceptor(logger *log.Logger) grpc.UnaryServerInterceptor {
 		}
 		tokenString := reqCasted.GetToken()
 		if tokenString == "" {
-			// global access case
-			return handler(ctx, req)
+			return nil, errors.New("missing auth token")
 		}
 
 		err := validateToken(reqCasted.GetToken(), logger)
