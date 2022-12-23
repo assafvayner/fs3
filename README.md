@@ -8,6 +8,14 @@ A distributed remote file system with a grpc interface and command line tool to 
 Jwt-dispensing authorization service that allows per user separation of access to files.
 Http frontend server to utilize the system from a web context over cli/scripts.
 
+## Key generation notes
+To run the app the internal worker nodes require tls to communicate securely, and to enable this we must generate some keys.
+To do this, enter the `keys/grpc-tls` directory and run `./make_keys.sh` then all the requisite keys will be generated for tls within the containers using grpc.
+
+To enable jwt usage, you will need a keys to use to sign or verify tokens.
+You can generate such keys by entering the `keys/jwt` directory and running `go run keygen.go`.
+Note that if you want to turn down the service then up again and be able to reuse old but non-expired jwt tokens then you will need to keep the same keys.
+
 ## Intended Runtime Configuration
 The server nodes for this project are intended to be managed via docker swarm and ran on cloudlab servers.
 There are make commands as well as instructions below to make running the application simply

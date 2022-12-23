@@ -22,14 +22,4 @@ do
 
   echo "Server's signed certificate"
   openssl x509 -in ${servname}/server-cert.pem -noout -text 
-
-  # 4. Generate a client's private key and certificate signing request (CSR) for server
-  openssl req -newkey rsa:4096 -nodes -keyout ${servname}/client-key.pem -out ${servname}/client-req.pem -subj "/C=US/CN=fs3 ${servname}"
-
-  # 5. Use CA's private key to sign client's CSR and get back the signed certificate
-  echo "subjectAltName=DNS:${servname}.fs3\n" > ${servname}/client-ext.cnf
-  openssl x509 -req -in ${servname}/client-req.pem -days 60 -CA fs3-ca-cert.pem -CAkey fs3-ca-key.pem -CAcreateserial -out ${servname}/client-cert.pem -extfile ${servname}/client-ext.cnf
-
-  echo "Client's signed certificate"
-  openssl x509 -in ${servname}/client-cert.pem -noout -text
 done
