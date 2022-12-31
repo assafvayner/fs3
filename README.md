@@ -1,12 +1,11 @@
 # fs3
 
-CSE 453 Data Center Systems final project
-Assaf Vayner (assafv) + Tom Wu (zw237)
-
 ## Summary
 A distributed remote file system with a grpc interface and command line tool to access it.
 Jwt-dispensing authorization service that allows per user separation of access to files.
 Http frontend server to utilize the system from a web context over cli/scripts.
+
+Began as a UW CSE 453 (Data Center Systems) final project.
 
 ## Key generation notes
 To run the app the internal worker nodes require tls to communicate securely, and to enable this we must generate some keys.
@@ -43,6 +42,8 @@ On cloudlab, first run `./start_docker.sh` in `/local/repository`
   - `sudo lxc exec vm1 -- docker stack deploy --compose-file fs3.yml fs3`
 
 ### Testing on cloudlab client
+- requires bringing profile.py into repo root from 453scripts dir
+- then on cloudlab creating a profile from repo
 - option 1 running the python testing scripts:
   - we require some dependencies that are missing under the current config, run the following:
     - `wget https://bootstrap.pypa.io/get-pip.py`
@@ -55,10 +56,6 @@ On cloudlab, first run `./start_docker.sh` in `/local/repository`
   - then run `make fs3_client`
   - the cli will be the resulting executable in `cli-go/fs3`
   - use `./fs3 -h` to get the options you can use
-
-## Performance analysis
-We intend to analyze performance by varying frequency of requests, and the size of request/response payloads.
-We will attempt to run the server application on containers running on bare metal as well as vms with virtualized storage i/o paths so as to showcase the performance gain of getting direct access to storage hardware.
 
 ### CLI client
 - run `make fs3_client`
@@ -85,3 +82,10 @@ After acquiring the prerequisites, simply run `make protos` to regenerate.
 - install requirements.txt (`pip install -r requirements.txt`)
   - we recommend using a virtual environment
 - reference: [grpc python basics](https://grpc.io/docs/languages/python/basics/)
+
+# TBD, in no particular order:
+- Host the service on non-cloudlab platform.
+- Get a signed certificate (letsencrypt) to set frontend service serving https.
+- Build a gui frontend, likely web based
+- Deploy with kubernetes rather than docker swarm
+- Set up failover state transfer, or set up stronger replication with a paxos variant
